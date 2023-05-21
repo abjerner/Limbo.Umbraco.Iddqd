@@ -1,0 +1,44 @@
+﻿.limbo-iddqd-examine table {
+  margin-bottom: 0;
+}
+.limbo-iddqd-examine.loading > div.results {
+  opacity: 0.5;
+}
+.limbo-iddqd-examine header {
+  display: flex;
+  margin-bottom: 10px;
+}
+.limbo-iddqd-examine header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 24px;
+}
+.limbo-iddqd-examine .btn {
+  margin: 0;
+}
+.limbo-iddqd-examine .btn.btn-xs {
+  padding: 2px 7px;
+  font-size: 11px;
+}
+.limbo-iddqd-examine .result + .result {
+  margin-top: 40px;
+}
+.limbo-iddqd-property-editors table.table.list {
+  width: 100%;
+}
+.limbo-iddqd-property-editors .alert.alert-danger {
+  margin: 10px 0 0 0;
+}
+.limbo-iddqd-property-editors .alert.alert-danger code {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+.limbo-iddqd-property-editors .col-editor {
+  width: 100%;
+}
+.limbo-iddqd-property-editors .col-data-types {
+  white-space: nowrap;
+}

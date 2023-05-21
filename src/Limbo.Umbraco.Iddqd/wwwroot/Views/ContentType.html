@@ -1,0 +1,28 @@
+﻿<div>
+    <table class="table details">
+        <tr>
+            <th>ID</th>
+            <td><code>{{model.id}}</code></td>
+        </tr>
+        <tr>
+            <th>Key</th>
+            <td><code>{{model.key}}</code></td>
+        </tr>
+        <tr>
+            <th>Alias</th>
+            <td><code>{{model.alias}}</code></td>
+        </tr>
+        <tr>
+            <th>Icon</th>
+            <td><code>{{model.icon}}</code></td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{model.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{model.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+﻿<div class="limbo-iddqd limbo-iddqd-property-editors" ng-controller="Limbo.Umbraco.Iddqd.PropertyEditors.Controller as vm">
+    <umb-editor-view umb-tabs footer="false">
+        <umb-editor-header name="vm.title"
+                           name-locked="true"
+                           hide-alias="true"
+                           hide-description="true"
+                           hide-icon="true">
+        </umb-editor-header>
+        <umb-editor-container>
+            <umb-box ng-repeat="group in vm.propertyEditors">
+                <umb-box-header title="{{group.name}}"></umb-box-header>
+                <umb-box-content>
+                    <table class="table list">
+                        <thead>
+                            <tr>
+                                <th class="col-editor">Property Editor</th>
+                                <th class="col-data-types">Data Editors</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="editor in group.editors">
+                                <td class="col-editor">
+                                    <umb-icon icon="{{editor.icon}}"></umb-icon>
+                                    <strong>{{editor.name}}</strong>
+                                    <small>({{editor.alias}})</small>
+
+                                    <div ng-if="editor.duplicates.length > 0" class="alert alert-danger">
+                                        Multiple property editors use the alias <code>{{editor.alias}}</code>. This may lead to errors or unexpected behavior.
+                                    </div>
+
+                                </td>
+                                <td class="col-data-types">
+                                    {{editor.dataTypes.length}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+    </umb-editor-view>
+    <umb-load-indicator ng-if="vm.loading"></umb-load-indicator>
+</div>
