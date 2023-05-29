@@ -14,6 +14,7 @@ namespace Limbo.Umbraco.Iddqd {
                 Version = IddqdPackage.InformationalVersion,
                 Scripts = new[] {
                     $"/App_Plugins/{IddqdPackage.Alias}/Scripts/App.js",
+                    $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Directives/Stairs.js",
                     $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Examine.js",
                     $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/PropertyEditors.js"
                 },

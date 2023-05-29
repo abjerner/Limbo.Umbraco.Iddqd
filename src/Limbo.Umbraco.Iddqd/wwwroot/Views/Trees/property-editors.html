@@ -1,33 +1,92 @@
-﻿<div class="limbo-iddqd limbo-iddqd-property-editors" ng-controller="Limbo.Umbraco.Iddqd.PropertyEditors.Controller as vm">
+﻿<div class="limbo-iddqd limbo-iddqd-property-editors" ng-controller="Limbo.Umbraco.Iddqd.PropertyEditors.Controller as vm" ng-class="{loading: vm.loading}">
     <umb-editor-view umb-tabs footer="false">
-        <umb-editor-header name="vm.title"
-                           name-locked="true"
-                           hide-alias="true"
-                           hide-description="true"
-                           hide-icon="true">
-        </umb-editor-header>
+        <div data-element="editor-header" class="umb-editor-header">
+            <div class="flex items-center" style="height: 100%;" aria-hidden="false">
+                <div class="flex items-center" style="flex: 1;">
+                    <div id="nameField" class="umb-editor-header__name-and-description" style="flex: 1 1 auto;">
+                        <h1 class="umb-panel-header-name" id="editor-headline-34" title="">Property Editors</h1>
+                    </div>
+                </div>
+                <div class="--options">
+                    <span ng-repeat="option in vm.options">
+                        <span ng-if="option.type === 'dropdown'" style="position: relative;">
+                            <button type="button" class="btn btn-default" ng-click="option.toggle()">
+                                {{option.name}}: <strong>{{option.value.name}}</strong>
+                            </button>
+                            <umb-dropdown ng-if="option.dropdownOpen" on-close="option.close()" umb-keyboard-list>
+                                <umb-dropdown-item ng-repeat="item in option.items">
+                                    <button type="button" class="btn-reset" ng-click="option.select(item)">{{ item.name }}</button>
+                                </umb-dropdown-item>
+                            </umb-dropdown>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
         <umb-editor-container>
-            <umb-box ng-repeat="group in vm.propertyEditors">
-                <umb-box-header title="{{group.name}}"></umb-box-header>
+            <umb-box ng-repeat="group in vm.groups">
+                <div class="umb-box-header" ng-if="group.name" title="{{group.name}}">
+                    <div>
+                        <div class="umb-box-header-title">
+                            {{group.name}}
+                            <span>({{group.editors.length}})</span>
+                        </div>
+                        <div ng-if="group.assembly" class="--facts">
+                            <table>
+                                <span>
+                                    <strong>Version:</strong>
+                                    {{group.assembly.version}}
+                                </span>
+                                <span>
+                                    <strong>Product:</strong>
+                                    {{group.assembly.product}}
+                                </span>
+                                <span>
+                                    <strong>Company:</strong>
+                                    {{group.assembly.company}}
+                                </span>
+                                <span ng-if="group.assembly.repositoryUrl">
+                                    <strong>Repository:</strong>
+                                    {{group.assembly.repositoryUrl}}
+                                </span>
+                                <span ng-if="group.assembly.marketplaceUrl">
+                                    <strong>Marketplace:</strong>
+                                    {{group.assembly.marketplaceUrl}}
+                                </span>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <umb-box-content>
                     <table class="table list">
                         <thead>
                             <tr>
                                 <th class="col-editor">Property Editor</th>
-                                <th class="col-data-types">Data Editors</th>
+                                <th ng-if="vm.groupBy != 'group'" style="white-space: nowrap;">Group</th>
+                                <th ng-if="vm.groupBy != 'editorType'" style="white-space: nowrap;">Editor Type</th>
+                                <th ng-if="vm.groupBy != 'valueType'" style="white-space: nowrap;">Value Type</th>
+                                <th class="col-data-types">Data Types</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="editor in group.editors">
                                 <td class="col-editor">
-                                    <umb-icon icon="{{editor.icon}}"></umb-icon>
-                                    <strong>{{editor.name}}</strong>
-                                    <small>({{editor.alias}})</small>
-
-                                    <div ng-if="editor.duplicates.length > 0" class="alert alert-danger">
-                                        Multiple property editors use the alias <code>{{editor.alias}}</code>. This may lead to errors or unexpected behavior.
-                                    </div>
-
+                                    <umb-icon icon="{{editor.icon
+                                }}"></umb-icon>
+                                <strong>{{editor.name}}</strong>
+                                <small>({{editor.alias}})</small>
+                                <div ng-if="editor.duplicates.length > 0" class="alert alert-danger">
+                                    Multiple property editors use the alias <code>{{editor.alias}}</code>. This may lead to errors or unexpected behavior.
+                                </div>
+                                </td>
+<td ng-if="vm.groupBy != 'group'" style="white-space: nowrap;">{{editor.group}}</td>
+                                <td ng-if="vm.groupBy != 'editorType'" style="white-space: nowrap;">
+                                    <span ng-if="editor.editorType">{{editor.editorType}}</span>
+                                    <em ng-if="!editor.editorType">Empty</em>
+                                </td>
+                                <td ng-if="vm.groupBy != 'valueType'" style="white-space: nowrap;">
+                                    <span ng-if="editor.valueType">{{editor.valueType}}</span>
+                                    <em ng-if="!editor.valueType">Empty</em>
                                 </td>
                                 <td class="col-data-types">
                                     {{editor.dataTypes.length}}
@@ -39,5 +98,5 @@
             </umb-box>
         </umb-editor-container>
     </umb-editor-view>
-    <umb-load-indicator ng-if="vm.loading"></umb-load-indicator>
+    <limbo-stairs ng-if="vm.loading"></limbo-stairs>
 </div>

@@ -20,6 +20,11 @@
         vm.loading = false;
     });
 
+
+
+
+
+
     vm.showSearchResultDialog = function (values) {
         localizationService.localize("examineManagement_fieldValues").then(function (value) {
             editorService.open({
@@ -53,5 +58,11 @@
         });
 
     }
+
+
+
+
+
+
 
 });

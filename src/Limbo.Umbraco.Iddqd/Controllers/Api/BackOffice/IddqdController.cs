@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Examine;
+using Limbo.Umbraco.Iddqd.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
-using Skybrud.Essentials.Json.Newtonsoft.Extensions;
+using Skybrud.Essentials.Collections;
+using Skybrud.Essentials.Collections.Extensions;
+using Skybrud.Essentials.Enums;
+using Skybrud.Essentials.Strings;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
@@ -174,25 +177,9 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice {
 
         public object GetPropertyEditors() {
 
-            static JObject ToJson(IDataEditor editor) {
-                return new JObject {
-                    {"alias", editor.Alias},
-                    {"icon", editor.Icon},
-                    {"group", editor.Group},
-                    {"name", editor.Name},
-                    {"deprecated", editor.IsDeprecated},
-                    {"type", editor.GetType().FullName}
-                };
-            }
-
-            static JObject DataTypeToJson(IDataType dataType) {
-                return new JObject {
-                    {"id", dataType.Id},
-                    {"key", dataType.Key},
-                    {"name", dataType.Name},
-                    {"editUrl", $"/umbraco/#/settings/dataTypes/edit/{dataType.Id}"}
-                };
-            }
+            PropertyEditorField sortField = EnumUtils.ParseEnum(Request.Query["sortField"], PropertyEditorField.Alias);
+            PropertyEditorField groupBy = EnumUtils.ParseEnum(Request.Query["groupBy"], PropertyEditorField.None);
+            SortOrder sortOrder = Request.Query["sortOrder"].ToString() is "descending" ? SortOrder.Descending : SortOrder.Ascending;
 
             var dataTypesByEditorAlias = _serviceProvider
                 .GetRequiredService<IDataTypeService>()
@@ -202,45 +189,49 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice {
 
             var propertyEditors = _serviceProvider
                 .GetRequiredService<PropertyEditorCollection>()
-                .OrderBy(x => x.Alias);
+                .Select(x => new PropertyEditor(x, dataTypesByEditorAlias))
+                .ToList();
 
-            List<JObject> temp = new();
-
-            foreach (var group in propertyEditors.GroupBy(x => x.Alias)) {
-
-                string alias = group.Key;
-
-                dataTypesByEditorAlias.TryGetValue(alias, out IGrouping<string, IDataType>? dataTypes);
-
-                foreach (var editor in group) {
-
-                    JObject json = ToJson(editor);
-
-                    JArray duplicates = new();
-                    foreach (var duplicate in group.Where(x => x != editor)) {
-                        duplicates.Add(ToJson(duplicate));
+            foreach (IGrouping<string, PropertyEditor> group in propertyEditors.GroupBy(x => x.Alias)) {
+                foreach (PropertyEditor editor in group) {
+                    foreach (PropertyEditor duplicate in group.Where(x => x != editor)) {
+                        editor.Duplicates.Add(new PropertyEditorItem(duplicate.Editor));
                     }
-                    if (duplicates.Count > 0) json.Add("duplicates", duplicates);
-
-                    JArray dataTypesArray = new();
-                    if (dataTypes is not null) {
-                        foreach (IDataType dataType in dataTypes) {
-                            dataTypesArray.Add(DataTypeToJson(dataType));
-                        }
-                    }
-                    json.Add("dataTypes", dataTypesArray);
-
-                    temp.Add(json);
-
                 }
-
             }
 
-            return temp
-                .OrderBy(x => x.GetString("group"))
-                .ThenBy(x => x.GetString("alias"))
-                .GroupBy(x => x.GetString("group"))
-                .Select(x => new { name = x.Key, editors = x });
+            Func<PropertyEditor, string?> keySelector = groupBy switch {
+                PropertyEditorField.None => (_) => "All",
+                PropertyEditorField.Alias => x => x.Alias,
+                PropertyEditorField.Name => x => x.Name,
+                PropertyEditorField.ValueType => x => x.ValueType ?? " Empty",
+                PropertyEditorField.Assembly => x => x.Assembly.Name ?? " Empty",
+                PropertyEditorField.Company => x => x.Assembly.Company ?? " Empty",
+                _ => x => StringUtils.FirstWithValue(x.Group, " Empty")
+            };
+
+            IEnumerable<PropertyEditorGroup> groups = propertyEditors
+                .GroupBy(keySelector)
+                .Select(x => CreateGroup(x.Key, x, sortField, sortOrder))
+                .OrderBy(x => x.Name);
+
+            return new PropertyEditorListResult(sortField, sortOrder, groupBy, groups);
+
+        }
+
+        private PropertyEditorGroup CreateGroup(string? name, IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
+            return new PropertyEditorGroup(name, Sort(propertyEditors, sortField, sortOrder));
+        }
+
+        private IEnumerable<PropertyEditor> Sort(IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
+            return sortField switch {
+                PropertyEditorField.Assembly => propertyEditors.OrderBy(x => x.Assembly?.Name, sortOrder),
+                PropertyEditorField.Group => propertyEditors.OrderBy(x => x.Group, sortOrder),
+                PropertyEditorField.Name => propertyEditors.OrderBy(x => x.Name, sortOrder),
+                PropertyEditorField.ValueType => propertyEditors.OrderBy(x => x.ValueType, sortOrder),
+                PropertyEditorField.DataTypes => propertyEditors.OrderBy(x => x.DataTypes.Count, sortOrder),
+                _ => propertyEditors.OrderBy(x => x.Alias, sortOrder)
+            };
 
         }
 

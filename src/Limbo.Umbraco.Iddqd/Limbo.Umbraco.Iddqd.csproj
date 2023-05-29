@@ -27,6 +27,11 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/abjerner/Limbo.Umbraco.Iddqd</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/limbo.umbraco.iddqd" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
   </ItemGroup>

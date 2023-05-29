@@ -12,7 +12,7 @@ using Umbraco.Cms.Web.Common.Attributes;
 namespace Limbo.Umbraco.Iddqd.Controllers.Trees {
 
     [PluginController("LimboIddqd")]
-    [Tree("settings", "iddqd", TreeTitle = "Iddqd", SortOrder = 5)]
+    [Tree("settings", "iddqd", TreeTitle = "Iddqd", SortOrder = 5, TreeGroup = Constants.Trees.Groups.ThirdParty)]
     public class IddqdTreeController : TreeController {
 
         private readonly IMenuItemCollectionFactory _menuItemCollectionFactory;

@@ -32,13 +32,108 @@
   margin: 10px 0 0 0;
 }
 .limbo-iddqd-property-editors .alert.alert-danger code {
-  background: rgba(0, 0, 0, 0.15);
-  border-color: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.15);
   color: #fff;
 }
 .limbo-iddqd-property-editors .col-editor {
   width: 100%;
 }
+.limbo-iddqd-property-editors .col-group {
+  min-width: 150px;
+}
 .limbo-iddqd-property-editors .col-data-types {
   white-space: nowrap;
+}
+.limbo-iddqd-property-editors .--options {
+  margin-right: 20px;
+}
+.limbo-iddqd-property-editors .--facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 5px;
+  font-size: 12px;
+}
+.limbo-iddqd-property-editors .--facts span {
+  white-space: nowrap;
+}
+.limbo-iddqd-property-editors.loading .umb-box {
+  opacity: 0.35;
+}
+.limbo-iddqd-property-editors .umb-box-header-title span {
+  font-weight: normal;
+  color: #666;
+  font-size: 14px;
+}
+.limbo-stairs svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  fill: #1b264f;
+  fill: #d42054;
+  animation-duration: 10s;
+  animation-name: limbo0;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.limbo-stairs svg rect.top {
+  animation-duration: 1s;
+  animation-name: limbo1;
+  animation-iteration-count: infinite;
+}
+.limbo-stairs svg rect.middle {
+  animation-duration: 1s;
+  animation-name: limbo2;
+  animation-iteration-count: infinite;
+}
+.limbo-stairs svg rect.bottom {
+  animation-duration: 1s;
+  animation-name: limbo3;
+  animation-iteration-count: infinite;
+}
+@keyframes limbo0 {
+  0% {
+    fill: #1b264f;
+  }
+  50% {
+    fill: darkorange;
+  }
+  100% {
+    fill: #d42054;
+  }
+}
+@keyframes limbo1 {
+  0% {
+    width: 0;
+  }
+  66.6% {
+    width: 0;
+  }
+  100% {
+    width: 14px;
+  }
+}
+@keyframes limbo2 {
+  33.3% {
+    width: 0;
+  }
+  66.6% {
+    width: 28px;
+  }
+  100% {
+    width: 28px;
+  }
+}
+@keyframes limbo3 {
+  0% {
+    width: 0;
+  }
+  33.3% {
+    width: 37px;
+  }
+  100% {
+    width: 37px;
+  }
 }
