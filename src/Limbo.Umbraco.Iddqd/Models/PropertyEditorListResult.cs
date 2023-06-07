@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Collections;
-using Skybrud.Essentials.Json.Converters.Enums;
+using Skybrud.Essentials.Json.Newtonsoft.Converters.Enums;
 
 #pragma warning disable CS1591
 
