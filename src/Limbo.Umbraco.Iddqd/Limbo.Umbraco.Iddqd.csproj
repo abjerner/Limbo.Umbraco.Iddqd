@@ -48,6 +48,11 @@
     <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,12.0)" />
   </ItemGroup>
 
+  <!-- Include package icon for NuGet -->
+  <ItemGroup>
+    <None Include="../build/Limbo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
   <!-- Generate XML documentation -->
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
