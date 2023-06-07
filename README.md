@@ -48,16 +48,17 @@ Install-Package Limbo.Umbraco.Iddqd -Version 1.0.0
 
 The package adds a new content app for both content and media showing how the node is indexed in Examine, and an option for re-indexing the node in each index. Supported indexes are the **ExternalIndex** and **InternalIndex** indexes, and optionally also the **PDFIndex** if the [**UmbracoExamine.PDF** package](https://github.com/umbraco/UmbracoExamine.PDF) is installed.
 
-![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/f659dd33-4b0c-4d98-acfb-64f5a68c2a10)
+![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/f7e5a5d6-3f97-481f-91e4-e4b77981d7a5)
 
 ### Info content app
 
 As a developer it's often relevant to know the GUID key of a specific content type, but this isn't directly available through the default UI of the backoffice. **Limbo Iddqd** introduces a new **Info** content app that shows various information about the content type being shown - eg. the GUID key.
 
-![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/72608d49-3dae-46f7-9750-8d890013d3e3)
+![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/228f140b-6c6d-4cc3-a6bd-1839626ec905)
 
 ### Property editors
 
 The list is available through the **Iddqd** tree in the **Settings** section. It exposes various information about each property editor, and also shows a warning if two property editors are registered with the same alias.
 
-![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/586a5be8-f360-407f-b080-0b509d15f92c)
+![image](https://github.com/abjerner/Limbo.Umbraco.Iddqd/assets/3634580/0cc622b3-3daa-4e05-a5fd-f8626858f1f2)
+
