@@ -225,7 +225,7 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice {
 
         private IEnumerable<PropertyEditor> Sort(IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
             return sortField switch {
-                PropertyEditorField.Assembly => propertyEditors.OrderBy(x => x.Assembly?.Name, sortOrder),
+                PropertyEditorField.Assembly => propertyEditors.OrderBy(x => x.Assembly.Name, sortOrder),
                 PropertyEditorField.Group => propertyEditors.OrderBy(x => x.Group, sortOrder),
                 PropertyEditorField.Name => propertyEditors.OrderBy(x => x.Name, sortOrder),
                 PropertyEditorField.ValueType => propertyEditors.OrderBy(x => x.ValueType, sortOrder),
