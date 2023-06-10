@@ -4,7 +4,7 @@
 
 
 
-**Limbo Iddqd** is a package that provides various developer oriented improvements for the Umbraco backoffice. The purpose of the package is somewhhat similar to that of the excellent [**Diplo God Mode** package](https://marketplace.umbraco.com/package/diplo.godmode) by Dan Diplo. **Limbo Iddqd** isn't supposed to replace the **Diplo God Mode** package, but more focus on some of the areas that **Diplo God Mode** doesn't cover. Coincidentally **iddqd** is the Doom cheat code for invulnerability - also known as *god mode*.
+**Limbo Iddqd** is a package that provides various developer oriented improvements for the Umbraco backoffice. The purpose of the package is somewhat similar to that of the excellent [**Diplo God Mode** package](https://marketplace.umbraco.com/package/diplo.godmode) by Dan Diplo. **Limbo Iddqd** isn't supposed to replace the **Diplo God Mode** package, but more focus on some of the areas that **Diplo God Mode** doesn't cover. Coincidentally **iddqd** is the Doom cheat code for invulnerability - also known as *god mode*.
 
 As of now, **Limbo Iddqd** provides the following improvements:
 
@@ -44,7 +44,7 @@ Install-Package Limbo.Umbraco.Iddqd -Version 1.0.0
 
 ## Features
 
-### Examine dashboard
+### Examine content app
 
 The package adds a new content app for both content and media showing how the node is indexed in Examine, and an option for re-indexing the node in each index. Supported indexes are the **ExternalIndex** and **InternalIndex** indexes, and optionally also the **PDFIndex** if the [**UmbracoExamine.PDF** package](https://github.com/umbraco/UmbracoExamine.PDF) is installed.
 
