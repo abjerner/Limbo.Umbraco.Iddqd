@@ -3,21 +3,19 @@ using Newtonsoft.Json;
 
 #pragma warning disable CS1591
 
-namespace Limbo.Umbraco.Iddqd.Models {
+namespace Limbo.Umbraco.Iddqd.Models;
 
-    public class PropertyEditorGroup {
+public class PropertyEditorGroup {
 
-        [JsonProperty("name")]
-        public string? Name { get; }
+    [JsonProperty("name")]
+    public string? Name { get; }
 
-        [JsonProperty("editors")]
-        public IEnumerable<PropertyEditor> Editors { get; }
+    [JsonProperty("editors")]
+    public IEnumerable<PropertyEditor> Editors { get; }
 
-        public PropertyEditorGroup(string? name, IEnumerable<PropertyEditor> editors) {
-            Name = name;
-            Editors = editors;
-        }
-
+    public PropertyEditorGroup(string? name, IEnumerable<PropertyEditor> editors) {
+        Name = name;
+        Editors = editors;
     }
 
 }

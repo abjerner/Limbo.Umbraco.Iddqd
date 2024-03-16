@@ -1,25 +1,23 @@
 ﻿#pragma warning disable CS1591
 
-namespace Limbo.Umbraco.Iddqd.Models {
+namespace Limbo.Umbraco.Iddqd.Models;
 
-    public enum PropertyEditorField {
+public enum PropertyEditorField {
 
-        None,
+    None,
 
-        Alias,
+    Alias,
 
-        Name,
+    Name,
 
-        Assembly,
+    Assembly,
 
-        Group,
+    Group,
 
-        ValueType,
+    ValueType,
 
-        Company,
+    Company,
 
-        DataTypes
-
-    }
+    DataTypes
 
 }

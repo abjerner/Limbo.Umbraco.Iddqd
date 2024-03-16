@@ -2,20 +2,18 @@ using Limbo.Umbraco.Iddqd.ContentApps;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Limbo.Umbraco.Iddqd.Composers {
+namespace Limbo.Umbraco.Iddqd.Composers;
+
+/// <inheritdoc />
+public class IddqdComposer : IComposer {
 
     /// <inheritdoc />
-    public class IddqdComposer : IComposer {
+    public void Compose(IUmbracoBuilder builder) {
 
-        /// <inheritdoc />
-        public void Compose(IUmbracoBuilder builder) {
+        builder.ManifestFilters().Append<IddqdManifestFilter>();
 
-            builder.ManifestFilters().Append<IddqdManifestFilter>();
-
-            builder.ContentApps().Append<IddqdInfoContentAppFactory>();
-            builder.ContentApps().Append<IddqdExamineContentAppFactory>();
-
-        }
+        builder.ContentApps().Append<IddqdInfoContentAppFactory>();
+        builder.ContentApps().Append<IddqdExamineContentAppFactory>();
 
     }
 
