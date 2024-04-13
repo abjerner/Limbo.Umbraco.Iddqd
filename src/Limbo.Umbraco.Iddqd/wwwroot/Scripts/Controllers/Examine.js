@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("Limbo.Umbraco.Iddqd.Examine.Controller", function ($http, $routeParams, editorState, editorService, localizationService) {
+﻿angular.module("umbraco").controller("Limbo.Umbraco.Iddqd.Examine.Controller", function ($http, $q, $routeParams, $timeout, editorState, editorService, localizationService) {
 
     const vm = this;
 
@@ -15,15 +15,25 @@
         section: $routeParams.section
     };
 
-    $http.get("/umbraco/backoffice/Limbo/Iddqd/GetExamineResultForContent", { params }).then(function (res) {
-        vm.results = res.data;
-        vm.loading = false;
-    });
+    vm.refresh = function () {
 
+        vm.loading = true;
 
+        // Refreshing is generally super fast, in which case the load indicator will flash very quickly. Adding a small
+        // delay should ensure that the load indicator doesn't appear to flash but still isn't shown too long for the
+        // user to notice (hopefully)
+        const promises = [
+            $timeout(function () { }, 250),
+            $http.get("/umbraco/backoffice/Limbo/Iddqd/GetExamineResultForContent", { params }).then(function (res) {
+                vm.results = res.data;
+            })
+        ];
 
+        $q.all(promises).then(function () {
+            vm.loading = false;
+        });
 
-
+    };
 
     vm.showSearchResultDialog = function (values) {
         localizationService.localize("examineManagement_fieldValues").then(function (value) {
@@ -59,10 +69,6 @@
 
     }
 
-
-
-
-
-
+    vm.refresh();
 
 });

@@ -1,0 +1,8 @@
+﻿<div class="limbo-iddqd limbo-iddqd-content-app" ng-controller="Limbo.Umbraco.Iddqd.ContentApp.Controller as vm">
+    <umb-editor-tab-bar ng-if="vm.tabs.length > 0">
+        <umb-tabs-nav tabs="vm.tabs" on-tab-change="vm.changeTab(tab)"></umb-tabs-nav>
+    </umb-editor-tab-bar>
+    <umb-tab-content ng-repeat="tab in vm.tabs" ng-if="tab.active" tab="tab">
+        <div ng-repeat="property in tab.properties" ng-include="property.view"></div>
+    </umb-tab-content>
+</div>
