@@ -137,3 +137,109 @@
     width: 37px;
   }
 }
+.limbo-iddqd-property-editor-data-types table.table.list td.nw {
+  white-space: nowrap;
+}
+.limbo-iddqd-property-editor-data-types table.table.list td.fw {
+  width: 100%;
+}
+.limbo-iddqd-property-editor-data-types table.table.list td {
+  vertical-align: top;
+}
+.limbo-iddqd-property-editor-data-types table.table.list button.btn.btn-link {
+  padding: 0;
+}
+.limbo-iddqd-property-editor-data-types table.table.list .umb-breadcrumbs {
+  font-size: 12px;
+}
+.limbo-iddqd-property-editor-data-types table.table.list .umb-breadcrumbs > li:first-child {
+  margin: 4px 4px 0 0;
+}
+.limbo-iddqd-property-editor .umb-empty-state.-center {
+  max-width: 600px;
+}
+.limbo-iddqd-property-editor table.table.details {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+.limbo-iddqd-property-editor table.table.details > tbody > tr > th {
+  max-width: 150px;
+  width: 150px;
+  padding-left: 0;
+}
+.limbo-iddqd-property-editor table.table.details > tbody > tr:first-child > th,
+.limbo-iddqd-property-editor table.table.details > tbody > tr:first-child > td {
+  border-top: 0;
+}
+.limbo-iddqd-link {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.limbo-iddqd-packages .umb-box-header-title span {
+  font-weight: normal;
+  color: #666;
+  font-size: 14px;
+}
+.limbo-iddqd-packages .--options {
+  display: flex;
+  margin-right: 20px;
+  gap: 5px;
+}
+.limbo-iddqd-packages .--options input {
+  margin: 0;
+}
+.limbo-iddqd-packages em {
+  color: #ccc;
+}
+.limbo-iddqd-packages .col-links div {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+}
+.limbo-iddqd-packages .col-links .btn.btn-sm {
+  padding: 3px 7px;
+  font-size: 12px;
+}
+.limbo-iddqd-packages td.nw {
+  white-space: nowrap;
+}
+.limbo-iddqd-packages td.fw {
+  width: 100%;
+}
+.limbo-iddqd-packages a.btn {
+  cursor: pointer;
+}
+.limbo-iddqd-packages table.table.list {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+.limbo-iddqd-packages table.table.list > thead > tr > th:first-child,
+.limbo-iddqd-packages table.table.list > tbody > tr > td:first-child {
+  padding-left: 0;
+}
+.limbo-iddqd-package table.table.details {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+.limbo-iddqd-package table.table.details > tbody > tr > th {
+  max-width: 150px;
+  width: 150px;
+  padding-left: 0;
+}
+.limbo-iddqd-package table.table.details > tbody > tr:first-child > th,
+.limbo-iddqd-package table.table.details > tbody > tr:first-child > td {
+  border-top: 0;
+}
+.limbo-iddqd-package .links {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+.limbo-iddqd-package .links a {
+  display: flex;
+  gap: 5px;
+}
+.limbo-iddqd-package em {
+  color: #ccc;
+}

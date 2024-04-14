@@ -1,0 +1,80 @@
+﻿<div class="limbo-iddqd limbo-iddqd-packages" ng-controller="Limbo.Umbraco.Iddqd.Packages.Controller as vm" ng-class="{loading: vm.loading}">
+    <umb-editor-view umb-tabs footer="false">
+        <div data-element="editor-header" class="umb-editor-header">
+            <div class="flex items-center" style="height: 100%;" aria-hidden="false">
+                <div class="flex items-center" style="flex: 1;">
+                    <div id="nameField" class="umb-editor-header__name-and-description" style="flex: 1 1 auto;">
+                        <h1 class="umb-panel-header-name" id="editor-headline-34" title="">{{vm.title}}</h1>
+                    </div>
+                </div>
+                <div class="--options">
+                    <span ng-repeat="option in vm.options">
+                        <span ng-if="option.type === 'text'">
+                            <input type="text" ng-model="option.value" placeholder="{{option.placeholder}}" ng-change="vm.textChanged(option)" />
+                        </span>
+                        <span ng-if="option.type === 'dropdown'" style="position: relative;">
+                            <button type="button" class="btn btn-default" ng-click="option.toggle()">
+                                {{option.name}}: <strong>{{option.value.name}}</strong>
+                            </button>
+                            <umb-dropdown ng-if="option.dropdownOpen" on-close="option.close()" umb-keyboard-list>
+                                <umb-dropdown-item ng-repeat="item in option.items">
+                                    <button type="button" class="btn-reset" ng-click="option.select(item)">{{ item.name }}</button>
+                                </umb-dropdown-item>
+                            </umb-dropdown>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <umb-editor-container>
+            <umb-box ng-repeat="group in vm.groups">
+                <div class="umb-box-header" ng-if="group.name" title="{{group.name}}">
+                    <div>
+                        <div class="umb-box-header-title">
+                            {{group.name}}
+                            <span>({{group.items.length}})</span>
+                        </div>
+                    </div>
+                </div>
+                <umb-box-content>
+                    <table class="table list">
+                        <thead>
+                            <tr>
+                                <th class="col-package">Package</th>
+                                <th class="col-version">Version</th>
+                                <th class="col-company" ng-if="vm.groupBy != 'company'">Company</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in group.items">
+                                <td class="col-package nw">
+                                    <button type="button" class="btn btn-link" style="padding: 0;" ng-click="vm.showPackage(item)">
+                                        <strong>{{item.packageName}}</strong>
+                                    </button>
+                                    <!-- <small ng-if="item.packageId && item.packageId != item.packageName">({{item.packageId}})</small> -->
+                                    <div ng-if="item.path" style="font-size: 11px;">{{item.path}}</div>
+                                    <div ng-if="item.assembly" style="font-size: 11px;">{{item.assembly.name}}.dll</div>
+                                </td>
+                                <td class="col-version fw">
+                                    <span ng-if="item.version">{{item.version}}</span>
+                                    <em ng-if="!item.version">N/A</em>
+                                    <div ng-if="item.versionHash" style="font-size: 11px;">{{item.versionHash}}</div>
+                                </td>
+                                <td class="col-company nw" ng-if="vm.groupBy != 'company'">
+                                    <span ng-if="item.assembly.company">{{item.assembly.company}}</span>
+                                    <em ng-if="!item.assembly.company">N/A</em>
+                                </td>
+                                <td class="col-links">
+                                    <div>
+                                        <a ng-repeat="link in item.links" ng-if="link.list" href="{{link.url}}" target="_blank" rel="noreferrer" class="btn btn-default btn-sm">{{link.name}}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+    </umb-editor-view>
+    <limbo-stairs ng-if="vm.loading"></limbo-stairs>
+</div>

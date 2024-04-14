@@ -5,7 +5,10 @@ using System.Threading;
 using Examine;
 using Limbo.Umbraco.Iddqd.Models;
 using Limbo.Umbraco.Iddqd.Models.DataTypes;
+using Limbo.Umbraco.Iddqd.Models.Packages;
+using Limbo.Umbraco.Iddqd.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Skybrud.Essentials.AspNetCore;
 using Skybrud.Essentials.Collections;
 using Skybrud.Essentials.Collections.Extensions;
 using Skybrud.Essentials.Enums;
@@ -32,8 +35,9 @@ public class IddqdController : UmbracoAuthorizedApiController {
     private readonly IContentValueSetBuilder _contentValueSetBuilder;
     private readonly IValueSetBuilder<IMedia> _mediaValueSetBuilder;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IddqdService _iddqdService;
 
-    public IddqdController(IContentService contentService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider) {
+    public IddqdController(IContentService contentService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider, IddqdService iddqdService) {
         _contentService = contentService;
         _dataTypeService = dataTypeService;
         _mediaService = mediaService;
@@ -41,6 +45,7 @@ public class IddqdController : UmbracoAuthorizedApiController {
         _contentValueSetBuilder = contentValueSetBuilder;
         _mediaValueSetBuilder = mediaValueSetBuilder;
         _serviceProvider = serviceProvider;
+        _iddqdService = iddqdService;
     }
 
     public IEnumerable<object> GetExamineResultForContent(string id, string section, string contentTypeAlias) {
@@ -233,14 +238,14 @@ public class IddqdController : UmbracoAuthorizedApiController {
 
             int[] path = dataType.Path.ToInt32Array();
 
-            List<object> breadcrumb = new List<object>();
+            List<object> breadcrumb = new();
 
             foreach (int id in path) {
 
                 if (id == -1) continue;
                 if (id == dataType.Id) continue;
 
-                var container = _dataTypeService.GetContainer(id);
+                EntityContainer? container = _dataTypeService.GetContainer(id);
                 if (container is null) continue;
 
                 breadcrumb.Add(new { id = container.Id, key = container.Key, name = container.Name });
@@ -255,11 +260,62 @@ public class IddqdController : UmbracoAuthorizedApiController {
 
     }
 
-    private PropertyEditorGroup CreateGroup(string? name, IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
-        return new PropertyEditorGroup(name, Sort(propertyEditors, sortField, sortOrder));
+    public object GetPackages(string? text = null) {
+
+        IddqdPackageType type = Request.Query.GetEnum("type", IddqdPackageType.None);
+        IddqdPackageField groupBy = Request.Query.GetEnum("groupBy", IddqdPackageField.None);
+        IddqdPackageField sortField = Request.Query.GetEnum("sortField", IddqdPackageField.Alias);
+        SortOrder sortOrder = Request.Query.GetEnum("sortOrder", SortOrder.Ascending);
+
+        IEnumerable<IddqdPackageManifest> all = _iddqdService.GetPackages();
+
+        if (!string.IsNullOrWhiteSpace(text)) {
+            all = all.Where(x => x.IsMatch(text));
+        }
+
+        if (type is not IddqdPackageType.None) all = all.Where(x => x.Type == type);
+
+        Func<IddqdPackageManifest, string?> keySelector = groupBy switch {
+            IddqdPackageField.None => _ => "All",
+            IddqdPackageField.Alias => x => x.PackageId ?? " No package ID",
+            IddqdPackageField.Name => x => x.PackageName,
+            IddqdPackageField.Assembly => x => x.Assembly?.Name ?? " No assembly",
+            IddqdPackageField.Company => x => x.Assembly?.Company ?? " No company",
+            IddqdPackageField.Product => x => x.Assembly?.Product ?? " No product",
+            IddqdPackageField.Type => x => x.Type.ToString(),
+            _ => x => x.PackageName,
+        };
+
+        IEnumerable<IddqdPackageGroup> groups = all
+            .GroupBy(keySelector)
+            .Select(x => CreatePackageGroup(x.Key, x, sortField, sortOrder))
+            .OrderBy(x => x.Name);
+
+        return new IddqdPackageListResult(type, sortField, sortOrder, groupBy, groups);
+
     }
 
-    private IEnumerable<PropertyEditor> Sort(IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
+    private IddqdPackageGroup CreatePackageGroup(string? name, IEnumerable<IddqdPackageManifest> packages, IddqdPackageField sortField, SortOrder sortOrder) {
+        return new IddqdPackageGroup(name, SortPackages(packages, sortField, sortOrder));
+    }
+
+    private PropertyEditorGroup CreateGroup(string? name, IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
+        return new PropertyEditorGroup(name, SortPropertyEditors(propertyEditors, sortField, sortOrder));
+    }
+
+    private IEnumerable<IddqdPackageManifest> SortPackages(IEnumerable<IddqdPackageManifest> propertyEditors, IddqdPackageField sortField, SortOrder sortOrder) {
+        return sortField switch {
+            IddqdPackageField.Assembly => propertyEditors.OrderBy(x => x.Assembly?.Name, sortOrder),
+            IddqdPackageField.Alias => propertyEditors.OrderBy(x => x.PackageId, sortOrder),
+            IddqdPackageField.Name => propertyEditors.OrderBy(x => x.PackageName, sortOrder),
+            IddqdPackageField.Company => propertyEditors.OrderBy(x => x.Assembly?.Company, sortOrder),
+            IddqdPackageField.Product => propertyEditors.OrderBy(x => x.Assembly?.Product, sortOrder),
+            _ => propertyEditors.OrderBy(x => x.PackageName, sortOrder)
+        };
+
+    }
+
+    private IEnumerable<PropertyEditor> SortPropertyEditors(IEnumerable<PropertyEditor> propertyEditors, PropertyEditorField sortField, SortOrder sortOrder) {
         return sortField switch {
             PropertyEditorField.Assembly => propertyEditors.OrderBy(x => x.Assembly.Name, sortOrder),
             PropertyEditorField.Group => propertyEditors.OrderBy(x => x.Group, sortOrder),

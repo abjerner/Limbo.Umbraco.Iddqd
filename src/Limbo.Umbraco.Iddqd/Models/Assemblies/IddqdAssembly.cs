@@ -6,9 +6,9 @@ using Umbraco.Extensions;
 
 #pragma warning disable CS1591
 
-namespace Limbo.Umbraco.Iddqd.Models;
+namespace Limbo.Umbraco.Iddqd.Models.Assemblies;
 
-public class PropertyEditorAssembly {
+public class IddqdAssembly {
 
     [JsonProperty("name")]
     public string? Name { get; }
@@ -40,6 +40,9 @@ public class PropertyEditorAssembly {
     [JsonProperty("packageProjectUrl")]
     public string? PackageProjectUrl { get; }
 
+    [JsonProperty("documentationUrl")]
+    public string? DocumentationUrl { get; }
+
     [JsonProperty("repositoryUrl")]
     public string? RepositoryUrl { get; }
 
@@ -49,7 +52,7 @@ public class PropertyEditorAssembly {
     [JsonProperty("nuGetUrl")]
     public string? NuGetUrl { get; }
 
-    public PropertyEditorAssembly(Assembly assembly) {
+    public IddqdAssembly(Assembly assembly) {
         Name = assembly.FullName?.Split(',')[0];
         Copyright = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright;
         Title = assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title;
@@ -60,6 +63,7 @@ public class PropertyEditorAssembly {
         Company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
         Product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product;
         PackageProjectUrl = GetMetadataValue(assembly, "PackageProjectUrl");
+        DocumentationUrl = GetMetadataValue(assembly, "DocumentationUrl");
         RepositoryUrl = GetMetadataValue(assembly, "RepositoryUrl");
         MarketplaceUrl = GetMetadataValue(assembly, "UmbracoMarketplaceUrl");
         NuGetUrl = GetMetadataValue(assembly, "NuGetUrl");

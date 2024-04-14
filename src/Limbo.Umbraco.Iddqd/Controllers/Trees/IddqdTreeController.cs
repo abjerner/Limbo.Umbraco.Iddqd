@@ -32,13 +32,19 @@ public class IddqdTreeController : TreeController {
     }
 
     protected override ActionResult<TreeNodeCollection> GetTreeNodes(string id, FormCollection queryStrings) {
-        var nodes = new TreeNodeCollection();
 
-        var node = CreateTreeNode("property-editors", "-1", queryStrings, "Property Editors", "icon-presentation", false);
+        TreeNodeCollection nodes = new();
+
+        TreeNode node = CreateTreeNode("property-editors", "-1", queryStrings, "Property Editors", "icon-presentation", false);
         node.RoutePath = "settings/iddqd/property-editors";
         nodes.Add(node);
 
+        TreeNode node2 = CreateTreeNode("packages", "-1", queryStrings, "Packages", "icon-box", false);
+        node2.RoutePath = "settings/iddqd/packages";
+        nodes.Add(node2);
+
         return nodes;
+
     }
 
     protected override ActionResult<MenuItemCollection> GetMenuForNode(string id, FormCollection queryStrings) {

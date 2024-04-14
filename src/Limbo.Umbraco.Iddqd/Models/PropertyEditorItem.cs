@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Limbo.Umbraco.Iddqd.Models.Assemblies;
+using Newtonsoft.Json;
 using Skybrud.Essentials.Reflection.Extensions;
 using Umbraco.Cms.Core.PropertyEditors;
 
@@ -33,7 +34,7 @@ public class PropertyEditorItem {
     public string Type { get; }
 
     [JsonProperty("assembly")]
-    public PropertyEditorAssembly Assembly { get; }
+    public IddqdAssembly Assembly { get; }
 
     public PropertyEditorItem(IDataEditor editor) {
 
@@ -46,7 +47,7 @@ public class PropertyEditorItem {
         Name = editor.Name;
         IsDeprecated = editor.IsDeprecated;
         Type = type.FullName ?? type.Name;
-        Assembly = new PropertyEditorAssembly(assembly);
+        Assembly = new IddqdAssembly(assembly);
         EditorType = editor.Type.ToString();
         ValueType = type.GetCustomAttribute<DataEditorAttribute>()?.ValueType;
 

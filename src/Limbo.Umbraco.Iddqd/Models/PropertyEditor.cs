@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Limbo.Umbraco.Iddqd.Models.Assemblies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Reflection.Extensions;
@@ -40,7 +41,7 @@ public class PropertyEditor {
     public string Type { get; }
 
     [JsonProperty("assembly")]
-    public PropertyEditorAssembly Assembly { get; }
+    public IddqdAssembly Assembly { get; }
 
     [JsonProperty("duplicates")]
     public List<PropertyEditorItem> Duplicates { get; } = new();
@@ -60,7 +61,7 @@ public class PropertyEditor {
         Name = editor.Name;
         IsDeprecated = editor.IsDeprecated;
         Type = type.FullName ?? type.Name;
-        Assembly = new PropertyEditorAssembly(assembly);
+        Assembly = new IddqdAssembly(assembly);
         EditorType = editor.Type.ToString();
         ValueType = type.GetCustomAttribute<DataEditorAttribute>()?.ValueType;
 
