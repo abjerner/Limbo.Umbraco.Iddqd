@@ -29,7 +29,7 @@ Shows a list of all property editors registered in Umbraco - either from `packag
 
 ## Installation
 
-### Umbraco 10
+### Umbraco 10-12
 
 The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/1.0.1). To install the package, you can use either .NET CLI:
 
