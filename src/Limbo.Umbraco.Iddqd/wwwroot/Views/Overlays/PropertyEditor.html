@@ -1,0 +1,142 @@
+﻿<div class="limbo-iddqd-property-editor" ng-controller="Limbo.Umbraco.Iddqd.PropertyEditor.Controller as vm">
+    <umb-editor-view>
+        <umb-editor-header name="model.title"
+                           loading="model.loading"
+                           name-locked="true"
+                           hide-alias="true"
+                           hide-description="true"
+                           hide-icon="true">
+        </umb-editor-header>
+        <umb-editor-container>
+            <umb-box>
+                <umb-box-header title="Property Editor"></umb-box-header>
+                <umb-box-content>
+                    <div>
+                        <table class="table details">
+                            <tr>
+                                <th>Alias</th>
+                                <td><code>{{model.propertyEditor.alias}}</code></td>
+                            </tr>
+                            <tr>
+                                <th>Icon</th>
+                                <td>
+                                    <code>{{model.propertyEditor.icon}}</code>
+                                    <umb-icon icon="{{model.propertyEditor.icon}}"></umb-icon>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Group</th>
+                                <td>
+                                    <span ng-if="model.propertyEditor.group">{{model.propertyEditor.group}}</span>
+                                    <em ng-if="!model.propertyEditor.group">None</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Name</th>
+                                <td><strong>{{model.propertyEditor.name}}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Deprecated</th>
+                                <td>{{model.propertyEditor.deprecated ? "Yes" : "No"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Value Type</th>
+                                <td>
+                                    <code ng-if="model.propertyEditor.valueType">{{model.propertyEditor.valueType}}</code>
+                                    <em ng-if="!model.propertyEditor.valueType">Unspecified</em>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+            <umb-box>
+                <umb-box-header title="Assembly"></umb-box-header>
+                <umb-box-content>
+                    <div ng-if="model.propertyEditor.type == 'Umbraco.Cms.Core.PropertyEditors.DataEditor'" style="position: relative; min-height: 75px;">
+                        <umb-empty-state position="center" size="small">
+                            The property editor appears to be defined in a <code>package.manifest</code> file, in which case the associated assembly can't be determined.
+                        </umb-empty-state>
+                    </div>
+                    <div ng-if="model.propertyEditor.type != 'Umbraco.Cms.Core.PropertyEditors.DataEditor'">
+                        <table class="table details">
+                            <tr>
+                                <th>Name</th>
+                                <td><strong>{{vm.assembly.name}}</strong></td>
+                            </tr>
+                            <tr ng-if="vm.assembly.title">
+                                <th>Title</th>
+                                <td>{{vm.assembly.title}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.description">
+                                <th>Description</th>
+                                <td>{{vm.assembly.description}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.version">
+                                <th>Version</th>
+                                <td>{{vm.assembly.version}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.fileVersion">
+                                <th>File Version</th>
+                                <td>{{vm.assembly.fileVersion}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.company">
+                                <th>Company</th>
+                                <td>{{vm.assembly.company}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.product">
+                                <th>Product</th>
+                                <td>{{vm.assembly.product}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.copyright">
+                                <th>Copyright</th>
+                                <td>{{vm.assembly.copyright}}</td>
+                            </tr>
+                            <tr ng-if="vm.assembly.packageProjectUrl">
+                                <th>Website</th>
+                                <td>
+                                    <div class="limbo-iddqd-link">
+                                        <a href="{{vm.assembly.packageProjectUrl}}" target="_blank" rel="noreferrer">{{vm.assembly.packageProjectUrl}}</a>
+                                        <umb-icon icon="icon-out"></umb-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-if="vm.assembly.repositoryUrl">
+                                <th>Repository</th>
+                                <td>
+                                    <div class="limbo-iddqd-link">
+                                        <a href="{{vm.assembly.repositoryUrl}}" target="_blank" rel="noreferrer">{{vm.assembly.repositoryUrl}}</a>
+                                        <umb-icon icon="icon-out"></umb-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-if="vm.assembly.marketplaceUrl">
+                                <th>Umbraco Marketplace</th>
+                                <td>
+                                    <div class="limbo-iddqd-link">
+                                        <a href="{{vm.assembly.marketplaceUrl}}" target="_blank" rel="noreferrer">{{vm.assembly.marketplaceUrl}}</a>
+                                        <umb-icon icon="icon-out"></umb-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-if="vm.assembly.nuGetUrl">
+                                <th>NuGet</th>
+                                <td>
+                                    <div class="limbo-iddqd-link">
+                                        <a href="{{vm.assembly.nuGetUrl}}" target="_blank" rel="noreferrer">{{vm.assembly.nuGetUrl}}</a>
+                                        <umb-icon icon="icon-out"></umb-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+        <umb-editor-footer>
+            <umb-editor-footer-content-right>
+                <umb-button ng-if="model.infiniteMode" action="model.close()" button-style="link" label-key="close" type="button" shortcut="esc"></umb-button>
+            </umb-editor-footer-content-right>
+        </umb-editor-footer>
+    </umb-editor-view>
+</div>

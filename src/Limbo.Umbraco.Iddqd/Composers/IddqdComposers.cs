@@ -1,8 +1,10 @@
 using Limbo.Umbraco.Iddqd.ContentApps;
 using Limbo.Umbraco.Iddqd.Helpers;
+using Limbo.Umbraco.Iddqd.Notifications.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Notifications;
 
 namespace Limbo.Umbraco.Iddqd.Composers;
 
@@ -18,6 +20,8 @@ public class IddqdComposer : IComposer {
         builder.ContentApps().Append<IddqdContentAppFactory>();
 
         builder.Services.AddSingleton<IddqdBackOfficeHelper>();
+
+        builder.AddNotificationHandler<ServerVariablesParsingNotification, ServerVariablesParsingHandler>();
 
     }
 

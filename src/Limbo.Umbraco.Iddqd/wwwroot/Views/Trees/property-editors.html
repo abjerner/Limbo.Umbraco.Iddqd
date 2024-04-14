@@ -71,15 +71,18 @@
                         <tbody>
                             <tr ng-repeat="editor in group.editors">
                                 <td class="col-editor">
-                                    <umb-icon icon="{{editor.icon
-                                }}"></umb-icon>
-                                <strong>{{editor.name}}</strong>
-                                <small>({{editor.alias}})</small>
-                                <div ng-if="editor.duplicates.length > 0" class="alert alert-danger">
-                                    Multiple property editors use the alias <code>{{editor.alias}}</code>. This may lead to errors or unexpected behavior.
-                                </div>
+                                    <div class="limbo-iddqd-link">
+                                        <umb-icon icon="{{editor.icon}}"></umb-icon>
+                                        <button type="button" class="btn btn-link" style="padding: 0;" ng-click="vm.showPropertyEditor(editor)">
+                                            <strong>{{editor.name}}</strong>
+                                        </button>
+                                        <small>({{editor.alias}})</small>
+                                    </div>
+                                    <div ng-if="editor.duplicates.length > 0" class="alert alert-danger">
+                                        Multiple property editors use the alias <code>{{editor.alias}}</code>. This may lead to errors or unexpected behavior.
+                                    </div>
                                 </td>
-<td ng-if="vm.groupBy != 'group'" style="white-space: nowrap;">{{editor.group}}</td>
+                                <td ng-if="vm.groupBy != 'group'" style="white-space: nowrap;">{{editor.group}}</td>
                                 <td ng-if="vm.groupBy != 'editorType'" style="white-space: nowrap;">
                                     <span ng-if="editor.editorType">{{editor.editorType}}</span>
                                     <em ng-if="!editor.editorType">Empty</em>
@@ -89,7 +92,8 @@
                                     <em ng-if="!editor.valueType">Empty</em>
                                 </td>
                                 <td class="col-data-types">
-                                    {{editor.dataTypes.length}}
+                                    <button type="button" class="btn btn-link" style="padding: 0;" ng-if="editor.dataTypes.length > 0" ng-click="vm.showDataType(editor)">{{editor.dataTypes.length}}</button>
+                                    <button type="button" class="btn btn-link" style="padding: 0;" disabled ng-if="editor.dataTypes.length == 0">{{editor.dataTypes.length}}</button>
                                 </td>
                             </tr>
                         </tbody>

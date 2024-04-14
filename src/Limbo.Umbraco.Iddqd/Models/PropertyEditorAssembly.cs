@@ -2,6 +2,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Reflection;
+using Umbraco.Extensions;
 
 #pragma warning disable CS1591
 
@@ -36,11 +37,17 @@ public class PropertyEditorAssembly {
     [JsonProperty("product")]
     public string? Product { get; }
 
+    [JsonProperty("packageProjectUrl")]
+    public string? PackageProjectUrl { get; }
+
     [JsonProperty("repositoryUrl")]
     public string? RepositoryUrl { get; }
 
     [JsonProperty("marketplaceUrl")]
     public string? MarketplaceUrl { get; }
+
+    [JsonProperty("nuGetUrl")]
+    public string? NuGetUrl { get; }
 
     public PropertyEditorAssembly(Assembly assembly) {
         Name = assembly.FullName?.Split(',')[0];
@@ -52,8 +59,14 @@ public class PropertyEditorAssembly {
         Configuration = assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration;
         Company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
         Product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product;
-        RepositoryUrl = assembly.GetCustomAttributes<AssemblyMetadataAttribute>().FirstOrDefault(x => x.Key == "RepositoryUrl")?.Value;
-        MarketplaceUrl = assembly.GetCustomAttributes<AssemblyMetadataAttribute>().FirstOrDefault(x => x.Key == "UmbracoMarketplaceUrl")?.Value;
+        PackageProjectUrl = GetMetadataValue(assembly, "PackageProjectUrl");
+        RepositoryUrl = GetMetadataValue(assembly, "RepositoryUrl");
+        MarketplaceUrl = GetMetadataValue(assembly, "UmbracoMarketplaceUrl");
+        NuGetUrl = GetMetadataValue(assembly, "NuGetUrl");
+    }
+
+    private static string? GetMetadataValue(Assembly assembly, string key) {
+        return assembly.GetCustomAttributes<AssemblyMetadataAttribute>().FirstOrDefault(x => x.Key.InvariantEquals(key))?.Value;
     }
 
 }

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using Examine;
 using Limbo.Umbraco.Iddqd.Models;
+using Limbo.Umbraco.Iddqd.Models.DataTypes;
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Essentials.Collections;
 using Skybrud.Essentials.Collections.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Strings;
+using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
@@ -24,14 +26,16 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice;
 public class IddqdController : UmbracoAuthorizedApiController {
 
     private readonly IContentService _contentService;
+    private readonly IDataTypeService _dataTypeService;
     private readonly IMediaService _mediaService;
     private readonly IExamineManager _examineManager;
     private readonly IContentValueSetBuilder _contentValueSetBuilder;
     private readonly IValueSetBuilder<IMedia> _mediaValueSetBuilder;
     private readonly IServiceProvider _serviceProvider;
 
-    public IddqdController(IContentService contentService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider) {
+    public IddqdController(IContentService contentService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider) {
         _contentService = contentService;
+        _dataTypeService = dataTypeService;
         _mediaService = mediaService;
         _examineManager = examineManager;
         _contentValueSetBuilder = contentValueSetBuilder;
@@ -216,6 +220,38 @@ public class IddqdController : UmbracoAuthorizedApiController {
             .OrderBy(x => x.Name);
 
         return new PropertyEditorListResult(sortField, sortOrder, groupBy, groups);
+
+    }
+
+    public object GetDataTypesByPropertyEditor(string editorAlias) {
+
+        IEnumerable<IDataType> dataTypes = _dataTypeService.GetByEditorAlias(editorAlias);
+
+        List<IddqdDataType> temp = new();
+
+        foreach (var dataType in dataTypes) {
+
+            int[] path = dataType.Path.ToInt32Array();
+
+            List<object> breadcrumb = new List<object>();
+
+            foreach (int id in path) {
+
+                if (id == -1) continue;
+                if (id == dataType.Id) continue;
+
+                var container = _dataTypeService.GetContainer(id);
+                if (container is null) continue;
+
+                breadcrumb.Add(new { id = container.Id, key = container.Key, name = container.Name });
+
+            }
+
+            temp.Add(new IddqdDataType(dataType, breadcrumb));
+
+        }
+
+        return temp;
 
     }
 

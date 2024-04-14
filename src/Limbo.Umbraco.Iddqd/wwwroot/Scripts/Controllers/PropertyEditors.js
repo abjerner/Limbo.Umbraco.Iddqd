@@ -1,4 +1,6 @@
-﻿angular.module("umbraco").controller("Limbo.Umbraco.Iddqd.PropertyEditors.Controller", function ($http, $q, $timeout) {
+﻿angular.module("umbraco").controller("Limbo.Umbraco.Iddqd.PropertyEditors.Controller", function ($http, $q, $timeout, editorService) {
+
+    const cacheBuster = Umbraco.Sys.ServerVariables.limbo.iddqd.cacheBuster;
 
     const vm = this;
 
@@ -45,6 +47,44 @@
             ]
         }
     ];
+
+    vm.showPropertyEditor = function (propertyEditor) {
+
+        const o = {
+            title: propertyEditor.name,
+            propertyEditor: propertyEditor,
+            size: "large",
+            view: "/App_Plugins/Limbo.Umbraco.Iddqd/Views/Overlays/PropertyEditor.html?v=" + cacheBuster,
+            close: function () {
+                editorService.close();
+            }
+        };
+
+        editorService.open(o);
+
+    };
+
+    vm.showDataType = function (propertyEditor) {
+
+        const o = {
+            title: propertyEditor.name,
+            propertyEditor: propertyEditor,
+            size: "large",
+            view: "/App_Plugins/Limbo.Umbraco.Iddqd/Views/Overlays/PropertyEditorDataTypes.html?v=" + cacheBuster,
+            loading: true,
+            close: function () {
+                editorService.close();
+            }
+        };
+
+        editorService.open(o);
+
+        $http.get("/umbraco/backoffice/Limbo/Iddqd/GetDataTypesByPropertyEditor?editorAlias=" + propertyEditor.alias).then(function (res) {
+            o.dataTypes = res.data;
+            o.loading = false;
+        });
+
+    };
 
     function updateList() {
 
