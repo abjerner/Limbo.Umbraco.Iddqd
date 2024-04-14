@@ -1,6 +1,10 @@
 # Limbo Iddqd
 
- [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd) [![NuGet](https://img.shields.io/nuget/dt/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd) [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/limbo.umbraco.iddqd)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/abjerner/Limbo.Umbraco.Iddqd/blob/v1/main/LICENSE.md)
+[![NuGet](https://img.shields.io/nuget/vpre/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd)
+[![NuGet](https://img.shields.io/nuget/dt/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd)
+[![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/limbo.umbraco.iddqd)
+[![Limbo.Umbraco.Iddqd at packages.limbo.works](https://img.shields.io/badge/limbo-packages-blue)](https://packages.limbo.works/limbo.umbraco.iddqd/)
 
 
 
@@ -25,16 +29,18 @@ Shows a list of all property editors registered in Umbraco - either from `packag
 
 ## Installation
 
-The Umbraco 10+ version of this package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/1.0.0). To install the package, you can use either .NET CLI:
+### Umbraco 10
+
+The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/1.0.1). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Iddqd --version 1.0.0
+dotnet add package Limbo.Umbraco.Iddqd --version 1.0.1
 ```
 
-or the older NuGet Package Manager:
+or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Iddqd -Version 1.0.0
+Install-Package Limbo.Umbraco.Iddqd -Version 1.0.1
 ```
 
 
