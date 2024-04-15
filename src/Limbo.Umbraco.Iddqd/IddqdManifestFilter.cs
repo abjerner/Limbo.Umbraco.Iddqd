@@ -10,6 +10,7 @@ public class IddqdManifestFilter : IManifestFilter {
     public void Filter(List<PackageManifest> manifests) {
         manifests.Add(new PackageManifest {
             AllowPackageTelemetry = true,
+            PackageId = IddqdPackage.Alias,
             PackageName = IddqdPackage.Name,
             Version = IddqdPackage.InformationalVersion,
             Scripts = new[] {
