@@ -1,11 +1,7 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Limbo.Umbraco.Iddqd.Models.Assemblies;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Skybrud.Essentials.Json.Newtonsoft;
-using Skybrud.Essentials.Json.Newtonsoft.Extensions;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Essentials.Strings;
 using Umbraco.Cms.Core.Manifest;
@@ -72,20 +68,9 @@ public class IddqdPackageManifest {
         Type = IddqdPackageType.PackageManifest;
         Version = manifest.Version;
 
-        // Since the package.manifest file may include properties not supported in Umbraco 10, we should try to parse
-        // the package.manifest file on our own
-        string? packageId = null;
-        string? versionAssemblyName = null;
-        try {
-            if (File.Exists(_manifest.Source)) {
-                JObject json = JsonUtils.LoadJsonObject(_manifest.Source);
-                packageId = json.GetString("packageId");
-                versionAssemblyName = json.GetString("versionAssemblyName");
-                if (!string.IsNullOrWhiteSpace(packageId)) PackageId = packageId;
-            }
-        } catch {
-            // ignore
-        }
+        // Get the package ID and/or assembly version from the package.manifest file
+        string? packageId = manifest.PackageId;
+        string? versionAssemblyName = manifest.VersionAssemblyName;
 
         // If the path is within the content root, we should only show the file's virtual path instead
         string[] path = Path.Split('/', '\\');
