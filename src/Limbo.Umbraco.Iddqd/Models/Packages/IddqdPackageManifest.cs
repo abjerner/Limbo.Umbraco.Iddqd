@@ -98,7 +98,6 @@ public class IddqdPackageManifest {
         // Try to load the assembly if we have determined an assembly name
         try {
             string assemblyName = StringUtils.FirstWithValue(versionAssemblyName, packageId);
-            _assemblyName = assemblyName;
             if (string.IsNullOrWhiteSpace(assemblyName)) return;
             Assembly assembly = System.Reflection.Assembly.Load(assemblyName);
             if (string.IsNullOrWhiteSpace(Version)) Version = ReflectionUtils.GetInformationalVersion(assembly);
@@ -107,17 +106,8 @@ public class IddqdPackageManifest {
             // ignore
         }
 
-        _packageId = packageId;
-        _versionAssemblyName = versionAssemblyName;
-
 
     }
-
-    public string _packageId { get; set; }
-
-    public string _versionAssemblyName { get; set; }
-
-    public string _assemblyName { get; set; }
 
     public bool IsMatch(string text) {
         if (PackageName.InvariantContains(text)) return true;
