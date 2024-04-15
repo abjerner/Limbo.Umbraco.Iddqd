@@ -53,7 +53,7 @@
                                     </button>
                                     <!-- <small ng-if="item.packageId && item.packageId != item.packageName">({{item.packageId}})</small> -->
                                     <div ng-if="item.path" style="font-size: 11px;">{{item.path}}</div>
-                                    <div ng-if="item.assembly" style="font-size: 11px;">{{item.assembly.name}}.dll</div>
+                                    <div ng-if="!item.path && item.assembly" style="font-size: 11px;">{{item.assembly.name}}.dll</div>
                                 </td>
                                 <td class="col-version fw">
                                     <span ng-if="item.version">{{item.version}}</span>
