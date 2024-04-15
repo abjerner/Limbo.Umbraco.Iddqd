@@ -66,6 +66,8 @@ public class IddqdPackageManifest {
         Path = _manifest.Source;
         Type = IddqdPackageType.PackageManifest;
 
+        Version = manifest.Version;
+
         string[] path = Path.Split('/', '\\');
 
         int pos = path.IndexOf("App_Plugins");
