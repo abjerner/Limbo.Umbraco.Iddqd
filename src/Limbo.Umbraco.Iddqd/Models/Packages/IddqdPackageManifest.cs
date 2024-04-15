@@ -1,8 +1,13 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Reflection;
 using Limbo.Umbraco.Iddqd.Models.Assemblies;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Json.Newtonsoft;
+using Skybrud.Essentials.Json.Newtonsoft.Extensions;
 using Skybrud.Essentials.Reflection;
+using Skybrud.Essentials.Strings;
 using Umbraco.Cms.Core.Manifest;
 using Umbraco.Extensions;
 
@@ -65,27 +70,60 @@ public class IddqdPackageManifest {
 
         Path = _manifest.Source;
         Type = IddqdPackageType.PackageManifest;
-
         Version = manifest.Version;
 
-        string[] path = Path.Split('/', '\\');
+        // Since the package.manifest file may include properties not supported in Umbraco 10, we should try to parse
+        // the package.manifest file on our own
+        string? packageId = null;
+        string? versionAssemblyName = null;
+        try {
+            if (File.Exists(_manifest.Source)) {
+                JObject json = JsonUtils.LoadJsonObject(_manifest.Source);
+                packageId = json.GetString("packageId");
+                versionAssemblyName = json.GetString("versionAssemblyName");
+                if (!string.IsNullOrWhiteSpace(packageId)) PackageId = packageId;
+            }
+        } catch {
+            // ignore
+        }
 
+        // If the path is within the content root, we should only show the file's virtual path instead
+        string[] path = Path.Split('/', '\\');
         int pos = path.IndexOf("App_Plugins");
         if (pos >= 0 && pos < path.Length - 1) {
-            PackageId = path[pos + 1];
+            if (string.IsNullOrWhiteSpace(PackageId)) PackageId = path[pos + 1];
             Path = $"~/{string.Join("/", path.Skip(pos))}";
         }
 
+        // Try to load the assembly if we have determined an assembly name
+        try {
+            string assemblyName = StringUtils.FirstWithValue(versionAssemblyName, packageId);
+            _assemblyName = assemblyName;
+            if (string.IsNullOrWhiteSpace(assemblyName)) return;
+            Assembly assembly = System.Reflection.Assembly.Load(assemblyName);
+            if (string.IsNullOrWhiteSpace(Version)) Version = ReflectionUtils.GetInformationalVersion(assembly);
+            Assembly = new IddqdAssembly(assembly);
+        } catch {
+            // ignore
+        }
+
+        _packageId = packageId;
+        _versionAssemblyName = versionAssemblyName;
+
+
     }
 
-    public bool IsMatch(string text) {
+    public string _packageId { get; set; }
 
+    public string _versionAssemblyName { get; set; }
+
+    public string _assemblyName { get; set; }
+
+    public bool IsMatch(string text) {
         if (PackageName.InvariantContains(text)) return true;
         if (PackageId is not null && PackageId.InvariantContains(text)) return true;
         if (Assembly?.Name is not null && Assembly.Name.InvariantContains(text)) return true;
-
         return false;
-
     }
 
 }
