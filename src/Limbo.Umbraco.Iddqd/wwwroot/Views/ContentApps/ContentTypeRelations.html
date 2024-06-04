@@ -1,0 +1,61 @@
+﻿<div class="limbo-iddqd-content-type-app" ng-controller="Limbo.Umbraco.Iddqd.ContentApps.ContentTypeRelations.Controller as vm">
+    <h4>Content Types</h4>
+    <table class="table list">
+        <thead ng-if="vm.relations.contentTypes.length > 0">
+            <tr>
+                <th>ID</th>
+                <th>Key</th>
+                <th>Alias</th>
+                <th>Name</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="ct in vm.relations.contentTypes">
+                <td>{{ct.id}}</td>
+                <td class="nw">{{ct.key}}</td>
+                <td class="nw">{{ct.alias}}</td>
+                <td class="fw">
+                    <button class="btn btn-link" ng-click="vm.openContentType(ct)" style="padding-left: 0; padding-right: 0;">
+                        <strong>{{ct.name}}</strong>
+                    </button>
+                </td>
+                <td class="nw">{{ct.type}}</td>
+            </tr>
+            <tr ng-if="vm.relations.contentTypes.length === 0">
+                <td colspan="4" style="padding: 50px; text-align: center;">No content type relations found.</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Data Types</h4>
+    <table class="table list">
+        <thead ng-if="vm.relations.dataTypes.length > 0">
+            <tr>
+                <th>ID</th>
+                <th>Key</th>
+                <th>Name</th>
+                <th>Editor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dt in vm.relations.dataTypes">
+                <td>{{dt.id}}</td>
+                <td class="nw">{{dt.key}}</td>
+                <td class="fw">
+                    <button class="btn btn-link" ng-click="vm.openDataType(dt)" style="padding-left: 0; padding-right: 0;">
+                        <strong>{{dt.name}}</strong>
+                    </button>
+                </td>
+                <td class="nw">
+                    {{dt.editorName}}
+                    <div>
+                        <small>{{dt.editorAlias}}</small>
+                    </div>
+                </td>
+            </tr>
+            <tr ng-if="vm.relations.dataTypes.length === 0">
+                <td colspan="4" style="padding: 50px; text-align: center;">No data type relations found.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

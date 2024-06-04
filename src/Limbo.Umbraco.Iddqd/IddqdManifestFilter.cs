@@ -19,6 +19,8 @@ public class IddqdManifestFilter : IManifestFilter {
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/Package.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/PropertyEditor.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/PropertyEditorDataTypes.js",
+                $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApps/ContentTypeInfo.js",
+                $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApps/ContentTypeRelations.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApp.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Examine.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Packages.js",

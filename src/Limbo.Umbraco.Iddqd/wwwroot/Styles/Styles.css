@@ -243,3 +243,12 @@
 .limbo-iddqd-package em {
   color: #ccc;
 }
+.limbo-iddqd-content-type-app h4 {
+  margin: 40px 0 15px 0;
+}
+.limbo-iddqd-content-type-app td.fw {
+  width: 100%;
+}
+.limbo-iddqd-content-type-app td.nw {
+  white-space: nowrap;
+}

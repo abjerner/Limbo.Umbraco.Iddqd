@@ -18,7 +18,7 @@ public class ContentAppModel {
     /// <summary>
     /// Gets the GUID key of the undelrying source.
     /// </summary>
-    [JsonProperty("Key", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("key", NullValueHandling = NullValueHandling.Ignore)]
     public Guid Key { get; set; }
 
     /// <summary>
@@ -31,6 +31,6 @@ public class ContentAppModel {
     /// Gets a list of tabs to be shown in the content app.
     /// </summary>
     [JsonProperty("tabs", Order = -10)]
-    public List<ContentAppTab> Tabs { get; } = new();
+    public List<ContentAppTab> Tabs { get; } = [];
 
 }

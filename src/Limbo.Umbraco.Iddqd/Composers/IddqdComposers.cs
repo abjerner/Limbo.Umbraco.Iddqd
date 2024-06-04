@@ -17,7 +17,6 @@ public class IddqdComposer : IComposer {
 
         builder.ManifestFilters().Append<IddqdManifestFilter>();
 
-        builder.ContentApps().Append<IddqdInfoContentAppFactory>();
         builder.ContentApps().Append<IddqdContentAppFactory>();
 
         builder.Services.AddSingleton<IddqdService>();

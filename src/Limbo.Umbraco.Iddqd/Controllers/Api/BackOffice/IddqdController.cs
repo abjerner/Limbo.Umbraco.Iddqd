@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using Examine;
 using Limbo.Umbraco.Iddqd.Models;
+using Limbo.Umbraco.Iddqd.Models.ContentApps.ContentTypes;
 using Limbo.Umbraco.Iddqd.Models.DataTypes;
+using Limbo.Umbraco.Iddqd.Models.Dtos;
 using Limbo.Umbraco.Iddqd.Models.Packages;
 using Limbo.Umbraco.Iddqd.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +21,10 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Examine;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Extensions;
 
 #pragma warning disable CS1591
 
@@ -28,7 +33,9 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice;
 [PluginController("Limbo")]
 public class IddqdController : UmbracoAuthorizedApiController {
 
+    private readonly IScopeProvider _scopeProvider;
     private readonly IContentService _contentService;
+    private readonly IContentTypeService _contentTypeService;
     private readonly IDataTypeService _dataTypeService;
     private readonly IMediaService _mediaService;
     private readonly IExamineManager _examineManager;
@@ -37,8 +44,10 @@ public class IddqdController : UmbracoAuthorizedApiController {
     private readonly IServiceProvider _serviceProvider;
     private readonly IddqdService _iddqdService;
 
-    public IddqdController(IContentService contentService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider, IddqdService iddqdService) {
+    public IddqdController(IScopeProvider scopeProvider, IContentService contentService, IContentTypeService contentTypeService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider, IddqdService iddqdService) {
+        _scopeProvider = scopeProvider;
         _contentService = contentService;
+        _contentTypeService = contentTypeService;
         _dataTypeService = dataTypeService;
         _mediaService = mediaService;
         _examineManager = examineManager;
@@ -181,6 +190,117 @@ public class IddqdController : UmbracoAuthorizedApiController {
         Thread.Sleep(2500);
 
         return GetExamineResultForContent(id, section, contentTypeAlias);
+
+    }
+
+    public object GetContentType(Guid key) {
+
+        IContentType? contentType = _contentTypeService.Get(key);
+        if (contentType is null) return NotFound("Content type not found.");
+
+        Dictionary<Guid, IDataType?> dataTypes = [];
+
+        static ApiDataType GetDataType(IPropertyType property, Dictionary<Guid, IDataType?> dataTypes, IDataTypeService dataTypeService) {
+
+            if (!dataTypes.TryGetValue(property.DataTypeKey, out IDataType? dataType)) {
+                dataType = dataTypeService.GetDataType(property.DataTypeKey);
+                dataTypes[property.DataTypeKey] = dataType;
+            }
+
+            return new ApiDataType(property.DataTypeId, property.DataTypeKey, dataType?.Name, dataType?.Editor?.Icon);
+
+        }
+
+        List<ApiPropertyGroup> propertyGroups = [];
+        foreach (PropertyGroup propertyGroup in contentType.PropertyGroups) {
+            List<ApiPropertyType> propertyTypes = [];
+            if (propertyGroup.PropertyTypes is not null) {
+                foreach (var propertyType in propertyGroup.PropertyTypes) {
+                    ApiDataType dt = GetDataType(propertyType, dataTypes, _dataTypeService);
+                    propertyTypes.Add(new ApiPropertyType(propertyType, dt));
+                }
+            }
+            propertyGroups.Add(new ApiPropertyGroup(propertyGroup, propertyTypes));
+        }
+
+        return new ApiContentType(contentType, propertyGroups);
+
+    }
+
+    public object GetContentTypeRelations(Guid key) {
+
+        IContentType? contentType = _contentTypeService.Get(key);
+        if (contentType is null) return NotFound("Content type not found.");
+
+        List<ApiContentTypeItem> contentTypes = [];
+
+        if (contentType.ParentId > 0) {
+            IContentType? parent = _contentTypeService.Get(contentType.ParentId);
+            if (parent is not null) contentTypes.Add(new ApiContentTypeItem(parent, "Parent"));
+        }
+
+        foreach (var hej in _contentTypeService.GetComposedOf(contentType.Id)) {
+            contentTypes.Add(new ApiContentTypeItem(hej, "Composition (child)"));
+        }
+
+        foreach (IContentTypeComposition composition in contentType.ContentTypeComposition) {
+            contentTypes.Add(new ApiContentTypeItem(composition, "Composition (parent)"));
+        }
+
+        using (IScope scope = _scopeProvider.CreateScope(autoComplete: true)) {
+
+            var sql = scope.Database.SqlContext
+                .Sql()
+                .From<AllowedTypeDto>()
+                .Where<AllowedTypeDto>(x => x.AllowedId == contentType.Id);
+
+            foreach (var dto in scope.Database.Fetch<AllowedTypeDto>(sql)) {
+                IContentType? ct = _contentTypeService.Get(dto.Id);
+                if (ct is not null) contentTypes.Add(new ApiContentTypeItem(ct, "Allowed type (parent)"));
+            }
+
+        }
+
+        if (contentType.AllowedContentTypes is not null) {
+            foreach (ContentTypeSort allowed in contentType.AllowedContentTypes) {
+                var ct = _contentTypeService.Get(allowed.Alias);
+                if (ct is not null) contentTypes.Add(new ApiContentTypeItem(ct, "Allowed type (child)"));
+            }
+        }
+
+        // Not sure about the best way to search database configurations, so at least for now, we find the IDs of the
+        // mathcing data types first, and then look them up again using the data type service
+        List<int> ids = [];
+        using (IScope scope = _scopeProvider.CreateScope(autoComplete: true)) {
+
+            // Passing on the key as a parameter apparently does work, so at least for now, we just include the key
+            // directly in the query
+            foreach (DataTypeDto dto in scope.Database.Fetch<DataTypeDto>($"SELECT [NodeId],[Config] FROM [dbo].[umbracoDataType] WHERE [config] LIKE '%{key}%' OR [config] LIKE '%@0%'", contentType.Alias)) {
+
+                // Converting the array into a hash set will give us O(1) lookups 😎
+                HashSet<string> tokens = dto.Config
+                    .ToLowerInvariant()
+                    .Split(' ', '\'', '"', ',')
+                    .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+                // By looking for the alias of the content type, we accidentally may get incorrect results if the alias
+                // matches a property name in the saved JSON. Unless we can come up with a better way to search without
+                // knowing the JSON structure in advance, this is acceptable behavior
+                if (tokens.Contains(contentType.Key.ToString()) || tokens.Contains(contentType.Alias)) {
+                    ids.Add(dto.NodeId);
+                }
+
+            }
+
+        }
+
+        // Get the related data types, if any
+        IEnumerable<IDataType> relatedDataTypes = ids.Count == 0 ? [] : _dataTypeService.GetAll([..ids]);
+
+        return new {
+            contentTypes,
+            dataTypes = relatedDataTypes.Select(x => new ApiDataType(x))
+        };
 
     }
 

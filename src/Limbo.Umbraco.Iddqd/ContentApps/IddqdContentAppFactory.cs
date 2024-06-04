@@ -24,7 +24,7 @@ public class IddqdContentAppFactory : IContentAppFactory {
     /// <summary>
     /// Returns the content app for the specified <paramref name="source"/>.
     /// </summary>
-    /// <param name="source">The source - eg. an <see cref="IContent"/> or <see cref="IMedia"/>.</param>
+    /// <param name="source">The source - e.g. an <see cref="IContent"/> or <see cref="IMedia"/>.</param>
     /// <param name="userGroups">The user groups of the user.</param>
     /// <returns>An instance of <see cref="ContentApp"/>, or <see langword="null"/> if a content app shouldn't be shown for <paramref name="source"/>.</returns>
     public ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {

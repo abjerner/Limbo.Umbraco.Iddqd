@@ -32,7 +32,7 @@ public class IddqdBackOfficeHelper {
     /// <summary>
     /// Returns the content app for the specified <paramref name="source"/>.
     /// </summary>
-    /// <param name="source">The source - eg. an <see cref="IContent"/> or <see cref="IMedia"/>.</param>
+    /// <param name="source">The source - e.g. an <see cref="IContent"/> or <see cref="IMedia"/>.</param>
     /// <param name="userGroups">The user groups of the user.</param>
     /// <returns>An instance of <see cref="ContentApp"/>, or <see langword="null"/> if a content app shouldn't be shown for <paramref name="source"/>.</returns>
     public virtual ContentApp? GetContentApp(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
@@ -40,7 +40,7 @@ public class IddqdBackOfficeHelper {
         return source switch {
             IContent content => GetContentApp(content),
             IMedia media => GetContentApp(media),
-            //IContentType contentType => GetContentApp(contentType),
+            IContentType contentType => GetContentApp(contentType),
             //IMediaType mediaType => GetContentApp(mediaType),
             _ => null
         };
@@ -71,7 +71,7 @@ public class IddqdBackOfficeHelper {
                 Tabs = {
                     new ContentAppTab {
                         Alias = "examine",
-                        Label = "Examine",
+                        Name = "Examine",
                         Properties = {
                             new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/Examine.html?v={v}")
                         }
@@ -106,7 +106,7 @@ public class IddqdBackOfficeHelper {
                 Tabs = {
                     new ContentAppTab {
                         Alias = "examine",
-                        Label = "Examine",
+                        Name = "Examine",
                         Properties = {
                             new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/Examine.html?v={v}")
                         }
@@ -118,7 +118,49 @@ public class IddqdBackOfficeHelper {
     }
 
     /// <summary>
-    /// Returns a cache buster value based both on Umbraco's own cache buster as well as the current version of
+    /// Returns the content app for the specified <paramref name="contentType"/> node.
+    /// </summary>
+    /// <param name="contentType">The content type.</param>
+    /// <returns>An instance of <see cref="ContentApp"/> if the media app supposed to be shown; otherwise, <see langword="null"/>.</returns>
+    protected virtual ContentApp? GetContentApp(IContentType contentType) {
+
+        if (contentType.Id == 0) return null;
+
+        string v = GetCacheBuster();
+
+        return new ContentApp {
+            Alias = "iddqd",
+            Name = "Iddqd",
+            Icon = "icon-lab",
+            Weight = 101,
+            View = $"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApp.html?v={v}",
+            ViewModel = new ContentAppModel {
+                Id = contentType.Id,
+                Key = contentType.Key,
+                Section = "content",
+                Tabs = {
+                    new ContentAppTab {
+                        Alias = "info",
+                        Name = "Info",
+                        Properties = {
+                            new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/ContentTypeInfo.html?v={v}")
+                        }
+                    },
+                    new ContentAppTab {
+                        Alias = "relations",
+                        Name = "Relations",
+                        Properties = {
+                            new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/ContentTypeRelations.html?v={v}")
+                        }
+                    }
+                }
+            }
+        };
+
+    }
+
+    /// <summary>
+    /// Returns a cache buster value based both on Umbraco's own cache buster and the current version of
     /// this package. This ensures a new cache buster value when either the ClientDependency version is bumped or
     /// the package is updated.
     /// </summary>

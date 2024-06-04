@@ -1,0 +1,79 @@
+﻿<div class="limbo-iddqd-content-type-app" ng-controller="Limbo.Umbraco.Iddqd.ContentApps.ContentTypeInfo.Controller as vm">
+    <h4>Content Type</h4>
+    <table class="table details">
+        <tr>
+            <th>ID</th>
+            <td><code>{{vm.contentType.id}}</code></td>
+        </tr>
+        <tr>
+            <th>Key</th>
+            <td><code>{{vm.contentType.key}}</code></td>
+        </tr>
+        <tr>
+            <th>Alias</th>
+            <td><code>{{vm.contentType.alias}}</code></td>
+        </tr>
+        <tr>
+            <th>Icon</th>
+            <td><code>{{vm.contentType.icon}}</code></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{vm.contentType.name}}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{model.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{model.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+        </tr>
+    </table>
+    <h4>Tabs, Groups & Properties</h4>
+    <table class="table list">
+        <thead>
+            <tr>
+                <th>ID / Key</th>
+                <th>Name / Alias</th>
+                <th>Data Type</th>
+                <th>Order</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="group in vm.contentType.propertyGroups">
+        <tr>
+            <td class="nw">
+                {{group.id}}
+                <div><small>{{group.key}}</small></div>
+            </td>
+            <td class="fw">
+                <strong>{{group.name}}</strong> ({{group.type}})
+                <div><small>{{group.alias}}</small></div>
+            </td>
+            <td></td>
+            <td>{{group.sortOrder}}</td>
+        </tr>
+        <tr ng-repeat="property in group.propertyTypes">
+            <td class="nw">
+                {{property.id}}
+                <div><small>{{property.key}}</small></div>
+            </td>
+            <td class="fw">
+                <strong>{{property.name}}</strong>
+                <div><small>{{property.alias}}</small></div>
+            </td>
+            <td class="nw">
+                <strong>{{property.dataType.name}}</strong>
+                <div><small>{{property.editor}}</small></div>
+            </td>
+            <td>{{property.sortOrder}}</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="vm.contentType.propertyGroups.length === 0">
+            <tr>
+                <td colspan="4" style="padding: 50px; text-align: center;">This content type has no properties.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
