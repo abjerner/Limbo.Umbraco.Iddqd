@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Limbo.Umbraco.Iddqd.Models.ContentApps;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
@@ -14,6 +16,7 @@ namespace Limbo.Umbraco.Iddqd.Helpers;
 public class IddqdBackOfficeHelper {
 
     private readonly IRuntimeState _runtimeState;
+    private readonly ISet<string> _allowedGroups = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) { "admin", "iddqd" };
 
     #region Constructors
 
@@ -36,6 +39,9 @@ public class IddqdBackOfficeHelper {
     /// <param name="userGroups">The user groups of the user.</param>
     /// <returns>An instance of <see cref="ContentApp"/>, or <see langword="null"/> if a content app shouldn't be shown for <paramref name="source"/>.</returns>
     public virtual ContentApp? GetContentApp(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
+
+        // Return null right away if the user is not in an allowed group
+        if (!userGroups.Any(x => _allowedGroups.Contains(x.Alias))) return null;
 
         return source switch {
             IContent content => GetContentApp(content),
