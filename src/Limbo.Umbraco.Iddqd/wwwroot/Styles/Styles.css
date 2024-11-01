@@ -252,3 +252,94 @@
 .limbo-iddqd-content-type-app td.nw {
   white-space: nowrap;
 }
+.limbo-iddqd-content-app h4 {
+  margin: 40px 0 15px 0;
+}
+.limbo-iddqd-content-app td.fw {
+  width: 100%;
+}
+.limbo-iddqd-content-app td.nw {
+  white-space: nowrap;
+}
+.limbo-iddqd-content-version table.table.list th span,
+.limbo-iddqd-content-version table.table.list th small {
+  font-weight: normal;
+}
+.limbo-iddqd-content-version table.table.list th,
+.limbo-iddqd-content-version table.table.list td {
+  vertical-align: top;
+}
+.limbo-iddqd-content-version table.table.list th.nw,
+.limbo-iddqd-content-version table.table.list td.nw {
+  white-space: nowrap;
+}
+.limbo-iddqd-content-version table.table.list th.fw,
+.limbo-iddqd-content-version table.table.list td.fw {
+  width: 100%;
+}
+.limbo-iddqd-json-view {
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 15px;
+  padding: 9.5px;
+  background-color: #f6f4f4;
+  border: 1px solid #d8d7d9;
+  border-radius: 3px;
+  position: relative;
+}
+.limbo-iddqd-json-view umb-button {
+  position: absolute;
+  z-index: 9001;
+  right: 10px;
+  top: 10px;
+}
+.limbo-iddqd-json-view > .collapser {
+  display: none;
+}
+.limbo-iddqd-json-view .collapser {
+  padding-right: 6px;
+  padding-left: 6px;
+  position: absolute;
+  top: 0.1em;
+  left: -1.4em;
+  cursor: default;
+}
+.limbo-iddqd-json-view .collapser:after {
+  content: "-";
+}
+.limbo-iddqd-json-view .json-property {
+  font-weight: bold;
+}
+.limbo-iddqd-json-view .json-boolean {
+  color: firebrick;
+}
+.limbo-iddqd-json-view .json-number {
+  color: blue;
+}
+.limbo-iddqd-json-view .json-string {
+  color: green;
+}
+.limbo-iddqd-json-view .json-null {
+  color: gray;
+}
+.limbo-iddqd-json-view .ellipsis {
+  display: none;
+  padding: 0 5px;
+}
+.limbo-iddqd-json-view ul,
+.limbo-iddqd-json-view li {
+  list-style: none;
+  margin: 0 15px;
+}
+.limbo-iddqd-json-view li {
+  position: relative;
+}
+.limbo-iddqd-json-view .collapsed > .collapser:after {
+  content: "+";
+}
+.limbo-iddqd-json-view .collapsed > .collapsible {
+  display: none;
+}
+.limbo-iddqd-json-view .collapsed > .ellipsis {
+  display: inline-block;
+}

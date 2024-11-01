@@ -13,22 +13,25 @@ public class IddqdManifestFilter : IManifestFilter {
             PackageId = IddqdPackage.Alias,
             PackageName = IddqdPackage.Name,
             Version = IddqdPackage.InformationalVersion,
-            Scripts = new[] {
+            Scripts = [
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/App.js",
+                $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Directives/JsonView.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Directives/Stairs.js",
+                $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/ContentVersion.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/Package.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/PropertyEditor.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Overlays/PropertyEditorDataTypes.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApps/ContentTypeInfo.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApps/ContentTypeRelations.js",
+                $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApps/ContentVersions.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/ContentApp.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Examine.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/Packages.js",
                 $"/App_Plugins/{IddqdPackage.Alias}/Scripts/Controllers/PropertyEditors.js"
-            },
-            Stylesheets = new[] {
+            ],
+            Stylesheets = [
                 $"/App_Plugins/{IddqdPackage.Alias}/Styles/Styles.css"
-            },
+            ],
         });
     }
 

@@ -81,6 +81,13 @@ public class IddqdBackOfficeHelper {
                         Properties = {
                             new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/Examine.html?v={v}")
                         }
+                    },
+                    new ContentAppTab {
+                        Alias = "versions",
+                        Name = "Versions",
+                        Properties = {
+                            new ContentAppProperty($"/App_Plugins/{IddqdPackage.Alias}/Views/ContentApps/ContentVersions.html?v={v}")
+                        }
                     }
                 }
             }

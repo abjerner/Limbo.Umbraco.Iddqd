@@ -4,6 +4,9 @@
 
     vm.editorState = editorState.current;
 
+    if ($scope.model.createDate) $scope.model.createDateDiff = moment(new Date($scope.model.createDate)).fromNow();
+    if ($scope.model.updateDate) $scope.model.updateDateDiff = moment(new Date($scope.model.updateDate)).fromNow();
+
     vm.update = function () {
 
         vm.loading = true;

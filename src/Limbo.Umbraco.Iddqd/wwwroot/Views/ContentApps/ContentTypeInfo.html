@@ -23,12 +23,18 @@
         </tr>
         <tr>
             <th>Created</th>
-            <td>{{model.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+            <td>
+                {{model.createDate | date: 'yyyy-MM-dd HH:mm'}}
+                <small ng-if="model.createDateDiff">({{model.createDateDiff}})</small>
+            </td>
         </tr>
-        <tr>
+<!--         <tr>
             <th>Updated</th>
-            <td>{{model.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>
-        </tr>
+            <td>
+                {{model.updateDate | date: 'yyyy-MM-dd HH:mm'}}
+                <small ng-if="model.updateDateDiff">({{model.updateDateDiff}})</small>
+            </td>
+        </tr> -->
     </table>
     <h4>Tabs, Groups & Properties</h4>
     <table class="table list">

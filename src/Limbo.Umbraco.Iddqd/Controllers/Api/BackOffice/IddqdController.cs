@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading;
 using Examine;
 using Limbo.Umbraco.Iddqd.Models;
 using Limbo.Umbraco.Iddqd.Models.ContentApps.ContentTypes;
+using Limbo.Umbraco.Iddqd.Models.ContentApps.Users;
 using Limbo.Umbraco.Iddqd.Models.DataTypes;
 using Limbo.Umbraco.Iddqd.Models.Dtos;
 using Limbo.Umbraco.Iddqd.Models.Packages;
@@ -17,7 +17,9 @@ using Skybrud.Essentials.Collections.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Strings.Extensions;
+using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Examine;
@@ -34,6 +36,7 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice;
 public class IddqdController : UmbracoAuthorizedApiController {
 
     private readonly IScopeProvider _scopeProvider;
+    private readonly IUserService _userService;
     private readonly IContentService _contentService;
     private readonly IContentTypeService _contentTypeService;
     private readonly IDataTypeService _dataTypeService;
@@ -44,8 +47,9 @@ public class IddqdController : UmbracoAuthorizedApiController {
     private readonly IServiceProvider _serviceProvider;
     private readonly IddqdService _iddqdService;
 
-    public IddqdController(IScopeProvider scopeProvider, IContentService contentService, IContentTypeService contentTypeService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider, IddqdService iddqdService) {
+    public IddqdController(IScopeProvider scopeProvider, IUserService userService, IContentService contentService, IContentTypeService contentTypeService, IDataTypeService dataTypeService, IMediaService mediaService, IExamineManager examineManager, IContentValueSetBuilder contentValueSetBuilder, IValueSetBuilder<IMedia> mediaValueSetBuilder, IServiceProvider serviceProvider, IddqdService iddqdService) {
         _scopeProvider = scopeProvider;
+        _userService = userService;
         _contentService = contentService;
         _contentTypeService = contentTypeService;
         _dataTypeService = dataTypeService;
@@ -64,16 +68,16 @@ public class IddqdController : UmbracoAuthorizedApiController {
         switch (section) {
 
             case "content":
-                indexNames = new List<string> { "ExternalIndex", "InternalIndex" };
+                indexNames = ["ExternalIndex", "InternalIndex"];
                 break;
 
             case "media":
-                indexNames = new List<string> { "ExternalIndex", "InternalIndex" };
+                indexNames = ["ExternalIndex", "InternalIndex"];
                 if (contentTypeAlias == "umbracoMediaArticle") indexNames.Add("PDFIndex");
                 break;
 
             default:
-                indexNames = new List<string>();
+                indexNames = [];
                 break;
 
         }
@@ -412,6 +416,105 @@ public class IddqdController : UmbracoAuthorizedApiController {
             .OrderBy(x => x.Name);
 
         return new IddqdPackageListResult(type, sortField, sortOrder, groupBy, groups);
+
+    }
+
+    public object GetContentVersions(Guid key) {
+
+        IContent? content = _contentService.GetById(key);
+        if (content is null) return NotFound($"Content with key '{key}' not found.");
+
+        IEnumerable<IContent> versions = _contentService.GetVersions(content.Id);
+
+        Dictionary<int, ApiUser> users = [];
+
+        List<object> result = [];
+
+        var propertyEditors = StaticServiceProvider.Instance.GetRequiredService<PropertyEditorCollection>();
+
+        foreach (IContent version in versions) {
+
+            List<object> properties = [];
+
+            foreach (IProperty property in version.Properties) {
+
+                propertyEditors.TryGet(property.PropertyType.PropertyEditorAlias, out IDataEditor? editor);
+
+                List<object> values = [];
+
+                foreach (var value in property.Values) {
+
+                    object? editedValue = value.EditedValue;
+
+
+                    string? type;
+                    switch (value.EditedValue) {
+
+                        case null:
+                            type = "null";
+                            break;
+
+                        case string str:
+                            if (str == "") type = "empty string";
+                            else if (string.IsNullOrWhiteSpace(str)) type = "whitespace";
+                            else type = "string";
+                            break;
+
+                        // Correct time zone as Umbraco thinks its UTC while its really local time
+                        case DateTime dt:
+                            type = "datetime";
+                            editedValue = new DateTime(dt.Ticks, DateTimeKind.Local);
+                            break;
+
+                        default:
+                            type = "other";
+                            break;
+
+                    }
+
+                    values.Add(new {
+                        culture = value.Culture ?? string.Empty,
+                        value = editedValue,
+                        type
+                    });
+
+                }
+
+                properties.Add(new {
+                    id = property.Id,
+                    alias = property.Alias,
+                    name = property.PropertyType.Name,
+                    storageType = property.ValueStorageType.ToLower(),
+                    variesByCulture = property.PropertyType.VariesByCulture(),
+                    editor = new {
+                        alias = property.PropertyType.PropertyEditorAlias,
+                        name = editor?.Alias,
+                        valueType = editor?.GetValueEditor(null).ValueType.ToLower(),
+                    },
+                    values
+                });
+
+            }
+
+            result.Add(new {
+                id = version.VersionId,
+                name = version.Name,
+                current = version.VersionId == content.VersionId,
+                updateDate = new DateTime(version.UpdateDate.Ticks, DateTimeKind.Local),
+                user = GetUserById(version.WriterId, users, _userService),
+                properties
+            });
+
+        }
+
+        return result;
+
+        static ApiUser GetUserById(int id, Dictionary<int, ApiUser> users, IUserService userService) {
+            if (users.TryGetValue(id, out var user)) return user;
+            IUser? u = userService.GetUserById(id);
+            users.Add(id, user = u is null ? new ApiUser(id) : new ApiUser(u));
+            return user;
+        }
 
     }
 

@@ -40,7 +40,7 @@
             editorService.open({
                 title: value,
                 searchResultValues: values,
-                size: "medium",
+                size: "large",
                 view: "views/dashboard/settings/examinemanagementresults.html",
                 close: function () {
                     editorService.close();
