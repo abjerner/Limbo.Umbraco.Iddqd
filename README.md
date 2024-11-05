@@ -31,16 +31,16 @@ Shows a list of all property editors registered in Umbraco - either from `packag
 
 ### Umbraco 13
 
-The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/13.0.0). To install the package, you can use either .NET CLI:
+The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/13.0.1). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Iddqd --version 13.0.0
+dotnet add package Limbo.Umbraco.Iddqd --version 13.0.1
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Iddqd -Version 13.0.0
+Install-Package Limbo.Umbraco.Iddqd -Version 13.0.1
 ```
 
 ### Umbraco 10-12
