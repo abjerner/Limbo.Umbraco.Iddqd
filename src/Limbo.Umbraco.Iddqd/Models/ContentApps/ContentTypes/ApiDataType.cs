@@ -38,8 +38,8 @@ public class ApiDataType {
         Key = dataType.Key;
         Name = dataType.Name;
         EditorAlias = dataType.EditorAlias;
-        EditorName = dataType.Editor?.Name;
-        EditorIcon = dataType.Editor?.Icon;
+        //EditorName = dataType.Editor?.Name;
+        //EditorIcon = dataType.Editor?.Icon;
     }
 
 }

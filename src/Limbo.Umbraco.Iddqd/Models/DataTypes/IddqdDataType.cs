@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models;
 
 namespace Limbo.Umbraco.Iddqd.Models.DataTypes;
@@ -15,32 +14,36 @@ public class IddqdDataType {
     /// <summary>
     /// Gets the numeric ID of the data type.
     /// </summary>
-    [JsonProperty("id")]
     public int Id => _dataType.Id;
 
     /// <summary>
     /// Gets the GUID key of the data type.
     /// </summary>
-    [JsonProperty("key")]
     public Guid Key => _dataType.Key;
 
     /// <summary>
     /// Gets the name of the data type.
     /// </summary>
-    [JsonProperty("name")]
-    public string Name => _dataType.Name!;
+    public string Name => _dataType.Name ?? string.Empty;
 
     /// <summary>
     /// Gets the path opf the data type.
     /// </summary>
-    [JsonProperty("path")]
     public List<object> Path { get; }
+
+    public string EditorAlias => _dataType.EditorAlias;
+
+    public string? EditorUiAlias => _dataType.EditorUiAlias;
+
+    public DateTime CreateDate => _dataType.CreateDate;
+
+    public DateTime UpdateDate => _dataType.UpdateDate;
 
     /// <summary>
     /// Initializes a new instance based on the specified <paramref name="dataType"/> and <paramref name="path"/>.
     /// </summary>
     /// <param name="dataType">The data type.</param>
-    /// <param name="path">The path of the data type, excluding the data type it self.</param>
+    /// <param name="path">The path of the data type, excluding the data type itself.</param>
     public IddqdDataType(IDataType dataType, List<object> path) {
         _dataType = dataType;
         Path = path;

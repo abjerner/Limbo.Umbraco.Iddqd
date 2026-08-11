@@ -10,13 +10,13 @@ namespace Limbo.Umbraco.Iddqd.Models.ContentApps;
 public class ContentAppModel {
 
     /// <summary>
-    /// Gets the ID of the undelrying source.
+    /// Gets the ID of the underlying source.
     /// </summary>
     [JsonProperty("id")]
     public int Id { get; set; }
 
     /// <summary>
-    /// Gets the GUID key of the undelrying source.
+    /// Gets the GUID key of the underlying source.
     /// </summary>
     [JsonProperty("key", NullValueHandling = NullValueHandling.Ignore)]
     public Guid Key { get; set; }
