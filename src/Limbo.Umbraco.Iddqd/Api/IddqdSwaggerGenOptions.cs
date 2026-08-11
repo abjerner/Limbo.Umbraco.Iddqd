@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using Skybrud.Essentials.Time;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Limbo.Umbraco.Iddqd.Api;
@@ -18,11 +17,8 @@ public class IddqdSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions> {
         });
 
         options.OperationFilter<IddqdSecurityFilter>();
-
-        //options.MapType<EssentialsTime>(() => new OpenApiSchema {
-        //    Type = JsonSchemaType.String,
-        //    Format = "date-time"
-        //});
+        options.SchemaFilter<IddqdSchemaFilter>();
+        options.DocumentFilter<IddqdDocumentFilter>();
 
     }
 

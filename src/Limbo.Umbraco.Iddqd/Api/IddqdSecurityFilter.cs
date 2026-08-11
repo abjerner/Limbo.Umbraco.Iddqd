@@ -2,8 +2,7 @@
 
 namespace Limbo.Umbraco.Iddqd.Api;
 
-#pragma warning disable CS1591
-public class IddqdSecurityFilter : BackOfficeSecurityRequirementsOperationFilterBase {
+internal class IddqdSecurityFilter : BackOfficeSecurityRequirementsOperationFilterBase {
 
     protected override string ApiName => IddqdApiConstants.Name;
 
