@@ -1,6 +1,6 @@
 # Limbo Iddqd
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/abjerner/Limbo.Umbraco.Iddqd/blob/v1/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/abjerner/Limbo.Umbraco.Iddqd/blob/v17/main/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/vpre/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd)
 [![NuGet](https://img.shields.io/nuget/dt/Limbo.Umbraco.Iddqd.svg)](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/limbo.umbraco.iddqd)
