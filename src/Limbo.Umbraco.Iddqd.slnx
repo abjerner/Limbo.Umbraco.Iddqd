@@ -5,6 +5,7 @@
     <File Path="../README.md" />
     <File Path="../release.bat" />
     <File Path=".editorconfig" />
+    <File Path="Limbo.Umbraco.Iddqd.sln.DotSettings" />
   </Folder>
   <Project Path="Limbo.Umbraco.Iddqd/Limbo.Umbraco.Iddqd.csproj" />
 </Solution>
