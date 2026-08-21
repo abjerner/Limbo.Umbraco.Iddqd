@@ -21,7 +21,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         string cacheBuster = IddqdPackage.InformationalVersion.ToMd5Hash();
 
         List<PackageManifest> temp = [
-            new PackageManifest {
+            new() {
                 Id = IddqdPackage.Alias,
                 Name = IddqdPackage.Name,
                 AllowTelemetry = true,

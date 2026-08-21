@@ -56,7 +56,7 @@ public class IddqdPackagesController : Controller {
 
             foreach (PackageManifest manifest in result) {
 
-                IddqdAssembly? assembly = null;
+                IddqdAssembly? assembly;
                 if (assemblies.TryGetValue(manifest.Id ?? string.Empty, out Assembly? ass)) {
                     assembly = new IddqdAssembly(ass);
                 } else if (assemblies.TryGetValue(manifest.Name, out ass)) {
@@ -96,7 +96,7 @@ public class IddqdPackageManifest {
 
     public bool AllowTelemetry { get; }
 
-    public IddqdPackageManifest(string? id, string name, string version, bool appPlugins, IddqdAssembly? assembly, bool allowTelemetry) {
+    public IddqdPackageManifest(string? id, string name, string? version, bool appPlugins, IddqdAssembly? assembly, bool allowTelemetry) {
         Id = id;
         Name = name;
         Version = version;
