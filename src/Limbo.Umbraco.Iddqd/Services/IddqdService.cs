@@ -62,7 +62,7 @@ public class IddqdService {
 
             case ExamineIndexes.ExternalIndex:
             case ExamineIndexes.InternalIndex:
-                IEnumerable<ValueSet> valueSets = _serviceProvider.GetRequiredService<IValueSetBuilder<IContent>>().GetValueSets(content);
+                IEnumerable<ValueSet> valueSets = _serviceProvider.GetRequiredService<IContentValueSetBuilder>().GetValueSets(content);
                 index.IndexItems(valueSets);
                 break;
 
