@@ -29,23 +29,24 @@ Shows a list of all property editors registered in Umbraco - either from `packag
 
 ## Installation
 
-### Umbraco 13
+### Umbraco 17
 
-The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd/13.0.1). To install the package, you can use either .NET CLI:
+Version 17 of this package supports Umbraco version 17. The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Iddqd --version 13.0.1
+dotnet add package Limbo.Umbraco.Iddqd --version 17.0.1-alpha001
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Iddqd -Version 13.0.1
+Install-Package Limbo.Umbraco.Iddqd -Version 17.0.1-alpha001
 ```
 
-### Umbraco 10-12
+### Other versions of Umbraco
 
-See the [**v1/main**](https://github.com/abjerner/Limbo.Umbraco.Iddqd/tree/v1/main#installation) branch.
+- [**`v13/main`**](https://github.com/abjerner/Limbo.Umbraco.Iddqd/tree/v13/main) Umbraco 13
+- ~~[**`v1/main`**](https://github.com/abjerner/Limbo.Umbraco.Iddqd/tree/v1/main) Umbraco 10, 11 and 12~~ <sub title="Umbraco 10, 11 and 12 have reached end-of-life"><sup>(EOL)</sup></sub>
 
 
 
