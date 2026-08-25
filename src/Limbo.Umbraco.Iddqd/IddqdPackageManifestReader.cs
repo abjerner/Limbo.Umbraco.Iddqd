@@ -5,6 +5,9 @@ using Skybrud.Essentials.Umbraco.Manifests.Conditions;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.EntryPoints;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Localization;
+using Skybrud.Essentials.Umbraco.Manifests.Extensions.Menus;
+using Skybrud.Essentials.Umbraco.Manifests.Extensions.Sections;
+using Skybrud.Essentials.Umbraco.Manifests.Extensions.Users;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Workspaces;
 using Umbraco.Cms.Core.Manifest;
 using Umbraco.Cms.Infrastructure.Manifest;
@@ -15,10 +18,15 @@ namespace Limbo.Umbraco.Iddqd;
 
 public class IddqdPackageManifestReader : IPackageManifestReader {
 
+    public static string CacheBuster = IddqdPackage.InformationalVersion.ToMd5Hash();
+
+    public const string Alias = IddqdPackage.Alias;
+
+    public const string Name = IddqdPackage.Name;
+
     public async Task<IEnumerable<PackageManifest>> ReadPackageManifestsAsync() {
 
         const string alias = IddqdPackage.Alias;
-        string cacheBuster = IddqdPackage.InformationalVersion.ToMd5Hash();
 
         List<PackageManifest> temp = [
             new() {
@@ -30,27 +38,17 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                     new BackofficeEntryPointExtension {
                         Name = "limbo.iddqd.entrypoint",
                         Alias = "Limbo.Umbraco.Redirects.EntryPoint",
-                        Js = $"/App_Plugins/{alias}/EntryPoint.js?v={cacheBuster}"
+                        Js = $"/App_Plugins/{alias}/EntryPoint.js?v={CacheBuster}"
                     },
-                    //new DashboardExtension {
-                    //    Name = "Iddqd",
-                    //    Alias = "Limbo.Umbraco.Iddqd.Dashboard",
-                    //    ElementName = "limbo-iddqd-dashboard",
-                    //    Js = $"/App_Plugins/{alias}/Elements/Dashboard.js?v={cacheBuster}",
-                    //    Weight = -10,
-                    //    Meta = new DashboardExtensionMeta {
-                    //        Label = "Iddqd",
-                    //        PathName = "iddqd",
-                    //    }
-                    //},
-                    CreateContentApp("Document", alias, cacheBuster, WorkspaceCondition.Document, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Content.js?v={cacheBuster}"),
-                    CreateContentApp("DocumentType", alias, cacheBuster, WorkspaceCondition.DocumentType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/ContentType.js?v={cacheBuster}"),
-                    CreateContentApp("DataType", alias, cacheBuster, WorkspaceCondition.DataType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/DataType.js?v={cacheBuster}"),
-                    CreateContentApp("Media", alias, cacheBuster, new WorkspaceCondition("Umb.Workspace.Media"), js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Media.js?v={cacheBuster}"),
-                    CreateContentApp("MediaType", alias, cacheBuster, WorkspaceCondition.MediaType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MediaType.js?v={cacheBuster}"),
-                    CreateContentApp("Member", alias, cacheBuster, WorkspaceCondition.Member, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Member.js?v={cacheBuster}"),
-                    CreateContentApp("MemberType", alias, cacheBuster, WorkspaceCondition.MemberType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MemberType.js?v={cacheBuster}"),
-                    CreateContentApp("User", alias, cacheBuster, WorkspaceCondition.User, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/User.js?v={cacheBuster}"),
+                    ..GetSettingsTreeExtensions(),
+                    CreateContentApp("Document", alias, CacheBuster, WorkspaceAliasCondition.Document, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Content.js?v={CacheBuster}"),
+                    CreateContentApp("DocumentType", alias, CacheBuster, WorkspaceAliasCondition.DocumentType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/ContentType.js?v={CacheBuster}"),
+                    CreateContentApp("DataType", alias, CacheBuster, WorkspaceAliasCondition.DataType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/DataType.js?v={CacheBuster}"),
+                    CreateContentApp("Media", alias, CacheBuster, new WorkspaceAliasCondition("Umb.Workspace.Media"), js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Media.js?v={CacheBuster}"),
+                    CreateContentApp("MediaType", alias, CacheBuster, WorkspaceAliasCondition.MediaType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MediaType.js?v={CacheBuster}"),
+                    CreateContentApp("Member", alias, CacheBuster, WorkspaceAliasCondition.Member, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Member.js?v={CacheBuster}"),
+                    CreateContentApp("MemberType", alias, CacheBuster, WorkspaceAliasCondition.MemberType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MemberType.js?v={CacheBuster}"),
+                    CreateContentApp("User", alias, CacheBuster, WorkspaceAliasCondition.User, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/User.js?v={CacheBuster}"),
                     new EntityUserPermissionExtension {
 	                    Alias = "My.UserPermission.Document.Iddqd",
 	                    Name = "IDDQD document permission",
@@ -67,38 +65,29 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                         Name = "English",
                         Meta = new LocalizationExtensionMeta {
                             Culture = "en",
-                            Localizations = LocalizationExtensionLocalizations
+                            Localizations = LocalizationDictionary
                                 .Create()
                                 .Set("user", "permissionsEntityGroup_limbo", "Limbo Packages")
                                 .Set("actionCategories", "limboIddqd", "Iddqd")
                         }
                     },
-                    //new {
-                    //    type = "repository",
-                    //    alias = "MyCustomTree.Repository",
-                    //    name =  "My Custom Tree Repository",
-                    //    api = $"/App_Plugins/{alias}/Tree/Repository.js?v={cacheBuster}"
-                    //},
-                    //new {
-                    //    type = "tree",
-                    //    alias = "MyCustomTree.Tree",
-                    //    name = "My Custom Tree",
-                    //    meta = new {
-                    //        repositoryAlias = "MyCustomTree.Repository"
-                    //    }
-                    //}
+                    new IconsExtension {
+                        Alias = $"{alias}.Icons",
+                        Name = $"{Name}: Icons",
+                        Js = $"/App_Plugins/{alias}/Icons/Icons.js?v={CacheBuster}"
+                    }
                 ],
                 Importmap = new PackageManifestImportmap {
                     Imports = new Dictionary<string, string> {
-                        {"@limbo/iddqd/auth", $"/App_Plugins/{alias}/IddqdAuth.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/package", $"/App_Plugins/{alias}/IddqdPackage.js?{cacheBuster}"},
-                        {"@limbo/iddqd/service", $"/App_Plugins/{alias}/IddqdService.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/http", $"/App_Plugins/{alias}/IddqdHttpClient.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/services/content", $"/App_Plugins/{alias}/Services/Content.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/services/media", $"/App_Plugins/{alias}/Services/Media.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/services/media-types", $"/App_Plugins/{alias}/Services/MediaTypes.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/services/members", $"/App_Plugins/{alias}/Services/Members.js?v={cacheBuster}"},
-                        {"@limbo/iddqd/elements/workspace-views/base", $"/App_Plugins/{alias}/Elements/WorkspaceViews/Base.js?v={cacheBuster}"}
+                        {"@limbo/iddqd/auth", $"/App_Plugins/{alias}/IddqdAuth.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/package", $"/App_Plugins/{alias}/IddqdPackage.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/service", $"/App_Plugins/{alias}/IddqdService.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/http", $"/App_Plugins/{alias}/IddqdHttpClient.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/services/content", $"/App_Plugins/{alias}/Services/Content.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/services/media", $"/App_Plugins/{alias}/Services/Media.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/services/media-types", $"/App_Plugins/{alias}/Services/MediaTypes.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/services/members", $"/App_Plugins/{alias}/Services/Members.js?v={CacheBuster}"},
+                        {"@limbo/iddqd/elements/workspace-views/base", $"/App_Plugins/{alias}/Elements/WorkspaceViews/Base.js?v={CacheBuster}"}
                     }
                 }
             }
@@ -109,7 +98,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
 
     }
 
-    private WorkspaceViewExtension CreateContentApp(string type, string alias, string cacheBuster, WorkspaceCondition condition, string? js = null) {
+    private WorkspaceViewExtension CreateContentApp(string type, string alias, string cacheBuster, WorkspaceAliasCondition condition, string? js = null) {
         return new WorkspaceViewExtension {
             Alias = $"Limbo.Umbraco.Iddqd.{type}ContentApp",
             Name = "Iddqd",
@@ -120,8 +109,136 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                 PathName = "iddqd",
                 Icon = "icon-lab"
             },
-            Conditions = [ condition/*, UserGroupCondition.Admin*/ ]
+            Conditions = [ condition, UserGroupCondition.Admin ]
         };
+    }
+
+    private static IEnumerable<IExtension> GetSettingsTreeExtensions() {
+
+        MenuExtension menu = new() {
+            Alias = $"{Alias}.Menu.SettingsGroup",
+            Name = $"{Name}: Tree Menu"
+        };
+
+        SectionSidebarAppExtension sidebarApp = new() {
+            Kind = "menu",
+            Alias = $"{Alias}.SidebarApp.SettingsGroup",
+            Name = $"{Name}: Sidebar App",
+            Meta = new SectionSidebarAppExtensionMeta {
+                Label = "Iddqd",
+                Menu = menu.Alias
+            },
+            Conditions = [
+                SectionAliasCondition.Settings
+            ]
+        };
+
+        return [
+            menu,
+            sidebarApp,
+            ..GetDomainExtensions(menu),
+            ..GetPackageExtensions(menu)
+        ];
+
+    }
+
+    private static IEnumerable<IExtension> GetDomainExtensions(MenuExtension menu) {
+
+        MenuItemExtension menuItem = new() {
+            Alias = $"{Alias}.Domains.TreeRoot",
+            Name = $"{Name}: Domains Tree",
+            Weight = 100,
+            Meta = new MenuItemExtensionMeta {
+                Label = "Domains",
+                Icon = "icon-globe",
+                EntityType = "iddqd-domains",
+                Menus = [menu.Alias]
+            }
+        };
+
+        WorkspaceExtension workspace = new() {
+            Kind = "default",
+            Alias = $"{Alias}.Domains.Workspace",
+            Name = $"{Name}: Domains Workspace",
+            Meta = new WorkspaceExtensionMeta {
+                EntityType = "iddqd-domains"
+            }
+        };
+
+        WorkspaceViewExtension workspaceView = new() {
+            Kind = "default",
+            Alias = $"{Alias}.Domains.WorkspaceView",
+            Name = $"{Name}: Domains Workspace View",
+            Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Domains.js?v={CacheBuster}",
+            ElementName = "iddqd-domains-workspace-view",
+            Weight = 100,
+            Meta = new WorkspaceViewExtensionMeta {
+                Label = "Iddqd",
+                PathName = "overview",
+                Icon = "icon-info"
+            },
+            Conditions = [
+                new WorkspaceAliasCondition(workspace.Alias)
+            ]
+        };
+
+        return [menuItem, workspace, workspaceView];
+
+    }
+
+    private static IEnumerable<IExtension> GetPackageExtensions(MenuExtension menu) {
+
+        MenuItemExtension menuItem = new() {
+            Alias = $"{Alias}.Packages.TreeRoot",
+            Name = $"{Name}: Packages Tree",
+            Weight = 100,
+            Meta = new MenuItemExtensionMeta {
+                Label = "Packages",
+                Icon = "icon-box",
+                EntityType = "iddqd-packages",
+                Menus = [menu.Alias]
+            }
+        };
+
+        WorkspaceExtension workspace = new() {
+            Alias = $"{Alias}.Packages.Workspace",
+            Name = $"{Name}: Packages Workspace",
+            Meta = new WorkspaceExtensionMeta {
+                EntityType = "iddqd-packages"
+            }
+        };
+
+        WorkspaceViewExtension workspaceView = new() {
+            Alias = $"{Alias}.Packages.WorkspaceView",
+            Name = $"{Name}: Packages Workspace View",
+            Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Packages.js?v={CacheBuster}",
+            Weight = 100,
+            Meta = new WorkspaceViewExtensionMeta {
+                Label = "Overview",
+                PathName = "overview",
+                Icon = "icon-info"
+            },
+            Conditions = [
+                new WorkspaceAliasCondition(workspace.Alias)
+            ]
+        };
+
+        return [menuItem, workspace, workspaceView];
+
+    }
+
+    internal class IconsExtension : IExtension {
+
+        public string Type => "icons";
+
+        // ReSharper disable once MemberHidesStaticFromOuterClass
+        public required string Alias { get; init; }
+
+        // ReSharper disable once MemberHidesStaticFromOuterClass
+        public required string Name { get; init; }
+
+        public required string Js { get; init; }
+
     }
 
 }

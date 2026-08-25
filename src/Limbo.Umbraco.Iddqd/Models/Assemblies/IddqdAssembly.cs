@@ -2,6 +2,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Reflection;
+using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Extensions;
 
 #pragma warning disable CS1591
@@ -37,6 +38,9 @@ public class IddqdAssembly {
     [JsonProperty("product")]
     public string? Product { get; }
 
+    [JsonProperty("authors")]
+    public string? Authors { get; }
+
     [JsonProperty("packageProjectUrl")]
     public string? PackageProjectUrl { get; }
 
@@ -62,6 +66,7 @@ public class IddqdAssembly {
         Configuration = assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration;
         Company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
         Product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product;
+        Authors = GetMetadataValue(assembly, "Authors");
         PackageProjectUrl = GetMetadataValue(assembly, "PackageProjectUrl");
         DocumentationUrl = GetMetadataValue(assembly, "DocumentationUrl");
         RepositoryUrl = GetMetadataValue(assembly, "RepositoryUrl");

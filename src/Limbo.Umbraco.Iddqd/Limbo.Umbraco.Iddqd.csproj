@@ -34,6 +34,7 @@
 
   <!-- Include additional metadata in the assembly -->
   <ItemGroup>
+    <AssemblyMetadata Include="Authors" Value="$(Authors)" />
     <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/" />
     <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/docs/v17/" />
     <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Limbo.Umbraco.Iddqd" />
@@ -49,7 +50,7 @@
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.68" />
     <PackageReference Include="Skybrud.Essentials.AspNetCore" Version="1.0.2" />
-    <PackageReference Include="Skybrud.Essentials.Umbraco" Version="17.0.0-alpha003" />
+    <PackageReference Include="Skybrud.Essentials.Umbraco" Version="17.0.0-alpha005" />
     <PackageReference Include="Umbraco.Cms.Core" Version="[17.1.0,17.999)" NoWarn="NU1902,NU1903" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.1.0,17.999)" NoWarn="NU1902,NU1903" />
     <PackageReference Include="Umbraco.Cms.Api.Management" Version="[17.0.0,17.999)" />
