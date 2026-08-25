@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Skybrud.Essentials.Security.Extensions;
 using Skybrud.Essentials.Umbraco.Manifests.Conditions;
+using Skybrud.Essentials.Umbraco.Manifests.Conditions.Users;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.EntryPoints;
+using Skybrud.Essentials.Umbraco.Manifests.Extensions.Icons;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Localization;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Menus;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Sections;
@@ -36,19 +38,19 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                 Version = IddqdPackage.InformationalVersion,
                 Extensions = [
                     new BackofficeEntryPointExtension {
-                        Name = "limbo.iddqd.entrypoint",
-                        Alias = "Limbo.Umbraco.Redirects.EntryPoint",
+                        Name = $"{Name}: Entry Point",
+                        Alias = $"{Alias}.EntryPoint",
                         Js = $"/App_Plugins/{alias}/EntryPoint.js?v={CacheBuster}"
                     },
                     ..GetSettingsTreeExtensions(),
-                    CreateContentApp("Document", alias, CacheBuster, WorkspaceAliasCondition.Document, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Content.js?v={CacheBuster}"),
-                    CreateContentApp("DocumentType", alias, CacheBuster, WorkspaceAliasCondition.DocumentType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/ContentType.js?v={CacheBuster}"),
-                    CreateContentApp("DataType", alias, CacheBuster, WorkspaceAliasCondition.DataType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/DataType.js?v={CacheBuster}"),
-                    CreateContentApp("Media", alias, CacheBuster, new WorkspaceAliasCondition("Umb.Workspace.Media"), js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Media.js?v={CacheBuster}"),
-                    CreateContentApp("MediaType", alias, CacheBuster, WorkspaceAliasCondition.MediaType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MediaType.js?v={CacheBuster}"),
-                    CreateContentApp("Member", alias, CacheBuster, WorkspaceAliasCondition.Member, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/Member.js?v={CacheBuster}"),
-                    CreateContentApp("MemberType", alias, CacheBuster, WorkspaceAliasCondition.MemberType, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/MemberType.js?v={CacheBuster}"),
-                    CreateContentApp("User", alias, CacheBuster, WorkspaceAliasCondition.User, js: $"/App_Plugins/{alias}/Elements/WorkspaceViews/User.js?v={CacheBuster}"),
+                    CreateWorkspaceView("Document", WorkspaceAliasCondition.Document),
+                    CreateWorkspaceView("DocumentType", WorkspaceAliasCondition.DocumentType),
+                    CreateWorkspaceView("DataType", WorkspaceAliasCondition.DataType),
+                    CreateWorkspaceView("Media", WorkspaceAliasCondition.Media),
+                    CreateWorkspaceView("MediaType", WorkspaceAliasCondition.MediaType),
+                    CreateWorkspaceView("Member", WorkspaceAliasCondition.Member),
+                    CreateWorkspaceView("MemberType", WorkspaceAliasCondition.MemberType),
+                    CreateWorkspaceView("User", WorkspaceAliasCondition.User),
                     new EntityUserPermissionExtension {
 	                    Alias = "My.UserPermission.Document.Iddqd",
 	                    Name = "IDDQD document permission",
@@ -98,18 +100,18 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
 
     }
 
-    private WorkspaceViewExtension CreateContentApp(string type, string alias, string cacheBuster, WorkspaceAliasCondition condition, string? js = null) {
+    private static WorkspaceViewExtension CreateWorkspaceView(string type, WorkspaceAliasCondition condition) {
         return new WorkspaceViewExtension {
-            Alias = $"Limbo.Umbraco.Iddqd.{type}ContentApp",
-            Name = "Iddqd",
+            Alias = $"{Alias}.{type}WorkspaceView",
+            Name = $"{Name}: {type} Workspace View",
             ElementName = "limbo-iddqd-content-app",
-            Js = js ?? $"/App_Plugins/{alias}/Elements/ContentApp.js?v={cacheBuster}",
+            Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/{type}.js?v={CacheBuster}",
             Meta = new WorkspaceViewExtensionMeta {
                 Label = "Iddqd",
                 PathName = "iddqd",
                 Icon = "icon-lab"
             },
-            Conditions = [ condition, UserGroupCondition.Admin ]
+            Conditions = [ condition, UserGroupIdCondition.Admin ]
         };
     }
 
@@ -224,20 +226,6 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         };
 
         return [menuItem, workspace, workspaceView];
-
-    }
-
-    internal class IconsExtension : IExtension {
-
-        public string Type => "icons";
-
-        // ReSharper disable once MemberHidesStaticFromOuterClass
-        public required string Alias { get; init; }
-
-        // ReSharper disable once MemberHidesStaticFromOuterClass
-        public required string Name { get; init; }
-
-        public required string Js { get; init; }
 
     }
 

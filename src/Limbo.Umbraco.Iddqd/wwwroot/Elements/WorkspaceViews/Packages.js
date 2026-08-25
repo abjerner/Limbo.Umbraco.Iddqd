@@ -94,7 +94,7 @@ export default class IddqdPackagesWorkspaceView extends UmbElementMixin(LitEleme
                             { name: "Website", icon: "icon-globe", url: item.packageProjectUrl },
                             { name: "Documentation", icon: "icon-book", url: item.documentationUrl },
                             { name: "Repository", icon: item.repositoryUrl?.indexOf("github.com") !== -1 ? "icon-github" : "icon-forking", url: item.repositoryUrl },
-                            { name: "Marketplace", icon: "icon-store", url: item.marketplaceUrl },
+                            { name: "Umbraco Marketplace", icon: "icon-store", url: item.marketplaceUrl },
                             { name: "NuGet", icon: "icon-iddqd-nuget", url: item.nuGetUrl }
                         ];
                     });
