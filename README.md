@@ -34,13 +34,13 @@ Shows a list of all property editors registered in Umbraco - either from `packag
 Version 17 of this package supports Umbraco version 17. The package is only available via [**NuGet**](https://www.nuget.org/packages/Limbo.Umbraco.Iddqd). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Iddqd --version 17.0.1-alpha001
+dotnet add package Limbo.Umbraco.Iddqd --version 17.0.1-alpha003
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Iddqd -Version 17.0.1-alpha001
+Install-Package Limbo.Umbraco.Iddqd -Version 17.0.1-alpha003
 ```
 
 ### Other versions of Umbraco
