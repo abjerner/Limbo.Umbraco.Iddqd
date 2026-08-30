@@ -106,10 +106,42 @@ export class IddqdService {
     static media = media;
     static packages = packages;
 
+    static assemblies = {
+        getLinks(assembly) {
+            return [
+                { name: "Website", icon: "icon-globe", url: assembly.packageProjectUrl },
+                { name: "Documentation", icon: "icon-book", url: assembly.documentationUrl },
+                { name: "Repository", icon: assembly.repositoryUrl?.indexOf("github.com") !== -1 ? "icon-github" : "icon-forking", url: assembly.repositoryUrl },
+                { name: "Umbraco Marketplace", icon: "icon-store", url: assembly.marketplaceUrl },
+                { name: "NuGet", icon: "icon-iddqd-nuget", url: assembly.nuGetUrl }
+            ];
+        },
+        updateLinks(assembly) {
+            if (!assembly) return;
+            assembly.links = IddqdService.assemblies.getLinks(assembly)
+        }
+    };
+
     static content = {
         get: async (key) => await getData(`${baseUrl}/content/${key}`),
         getExamine: async (key) => await getData(`${baseUrl}/content/${key}/examine`),
         updateExamine: async (key) => await postData(`${baseUrl}/content/${key}/examine`)
+    };
+
+    static dataTypes = {
+        get: async function (key) {
+
+            const dataType = await getData(`${baseUrl}/data-types/${key}`);
+
+            IddqdService.assemblies.updateLinks(dataType?.editor?.assembly);
+            if (dataType.createDate) dataType.createDate = new Date(dataType.createDate);
+            if (dataType.updateDate) dataType.updateDate = new Date(dataType.updateDate);
+
+            return dataType;
+
+        },
+        getRelations: async (key) => await getData(`${baseUrl}/data-types/${key}/relations`),
+        getAll: async () => await getData(`${baseUrl}/data-types`)
     };
 
     static members = {
@@ -138,6 +170,7 @@ export class IddqdService {
 
     static async getDataType(key) {
         const response = await get(`${baseUrl}/data-types/${key}`);
+        IddqdService.assemblies.updateLinks(response.data?.editor?.assembly);
         if (response.data.createDate) response.data.createDate = new Date(response.data.createDate);
         if (response.data.updateDate) response.data.updateDate = new Date(response.data.updateDate);
         return response.data;

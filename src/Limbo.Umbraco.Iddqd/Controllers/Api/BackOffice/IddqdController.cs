@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Asp.Versioning;
-using Examine;
 using Limbo.Umbraco.Iddqd.Api;
 using Limbo.Umbraco.Iddqd.Helpers;
 using Limbo.Umbraco.Iddqd.Models;
-using Limbo.Umbraco.Iddqd.Models.DataTypes;
-using Limbo.Umbraco.Iddqd.Models.Dtos;
-using Limbo.Umbraco.Iddqd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Skybrud.Essentials.Security.Extensions;
@@ -31,31 +26,19 @@ namespace Limbo.Umbraco.Iddqd.Controllers.Api.BackOffice;
 [ApiExplorerSettings(GroupName = "General")]
 public class IddqdController : Controller {
 
-    private readonly IContentService _contentService;
     private readonly IContentTypeService _contentTypeService;
-    private readonly IDataTypeService _dataTypeService;
-    private readonly IMediaService _mediaService;
     private readonly IMediaTypeService _mediaTypeService;
     private readonly IPublishedContentTypeFactory _publishedContentTypeFactory;
-    private readonly IddqdHelper _helper;
     private readonly IddqdRequestHelper _requestHelper;
-    private readonly IExamineManager _examineManager;
     private readonly IUserService _userService;
-    private readonly IddqdService _iddqdService;
 
-    public IddqdController(IContentService contentService, IContentTypeService contentTypeService, IDataTypeService dataTypeService, IMediaService mediaService, IMediaTypeService mediaTypeService,
-        IPublishedContentTypeFactory publishedContentTypeFactory, IddqdHelper helper, IddqdRequestHelper requestHelper, IExamineManager examineManager, IUserService userService, IddqdService iddqdService) {
-        _contentService = contentService;
+    public IddqdController(IContentTypeService contentTypeService, IMediaTypeService mediaTypeService,
+        IPublishedContentTypeFactory publishedContentTypeFactory, IddqdRequestHelper requestHelper, IUserService userService) {
         _contentTypeService = contentTypeService;
-        _dataTypeService = dataTypeService;
-        _mediaService = mediaService;
         _mediaTypeService = mediaTypeService;
         _publishedContentTypeFactory = publishedContentTypeFactory;
-        _helper = helper;
         _requestHelper = requestHelper;
-        _examineManager = examineManager;
         _userService = userService;
-        _iddqdService = iddqdService;
     }
 
     #region Public API methods
@@ -67,35 +50,6 @@ public class IddqdController : Controller {
             version = IddqdPackage.InformationalVersion,
             cacheBuster = IddqdPackage.InformationalVersion.ToMd5Hash()
         };
-    }
-
-    [HttpGet("data-types/{key}")]
-    public async Task<ActionResult<IddqdDataType>> GetDataType(Guid key) {
-        IDataType? dataType = await _dataTypeService.GetAsync(key);
-        if (dataType == null) return NotFound();
-        return new IddqdDataType(dataType, []);
-    }
-
-    [HttpGet("data-types/{key}/relations")]
-    public async Task<ActionResult<object>> GetDataTypeRelations(Guid key) {
-
-        IDataType? dataType = await _dataTypeService.GetAsync(key);
-        if (dataType == null) return NotFound();
-
-        List<IddqdPropertyTypeDto> contentTypes = [];
-        List<IddqdPropertyTypeDto> mediaTypes = [];
-        List<IddqdPropertyTypeDto> memberTypes = [];
-
-        foreach (IddqdPropertyTypeDto dto in _helper.GetPropertyTypes(dataType)) {
-            switch (dto.NodeObjectType.ToString().ToUpper()) {
-                case global::Umbraco.Cms.Core.Constants.ObjectTypes.Strings.DocumentType: contentTypes.Add(dto); break;
-                case global::Umbraco.Cms.Core.Constants.ObjectTypes.Strings.MediaType: mediaTypes.Add(dto); break;
-                case global::Umbraco.Cms.Core.Constants.ObjectTypes.Strings.MemberType: memberTypes.Add(dto); break;
-            }
-        }
-
-        return new { contentTypes, mediaTypes, memberTypes };
-
     }
 
     [HttpGet("content-types/{key}")]

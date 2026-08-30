@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
+using Limbo.Umbraco.Iddqd.Extensions;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Reflection;
-using Skybrud.Essentials.Strings.Extensions;
-using Umbraco.Extensions;
 
 #pragma warning disable CS1591
 
@@ -66,16 +64,12 @@ public class IddqdAssembly {
         Configuration = assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration;
         Company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company;
         Product = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product;
-        Authors = GetMetadataValue(assembly, "Authors");
-        PackageProjectUrl = GetMetadataValue(assembly, "PackageProjectUrl");
-        DocumentationUrl = GetMetadataValue(assembly, "DocumentationUrl");
-        RepositoryUrl = GetMetadataValue(assembly, "RepositoryUrl");
-        MarketplaceUrl = GetMetadataValue(assembly, "UmbracoMarketplaceUrl");
-        NuGetUrl = GetMetadataValue(assembly, "NuGetUrl");
-    }
-
-    private static string? GetMetadataValue(Assembly assembly, string key) {
-        return assembly.GetCustomAttributes<AssemblyMetadataAttribute>().FirstOrDefault(x => x.Key.InvariantEquals(key))?.Value;
+        Authors = assembly.GetMetadata("Authors");
+        PackageProjectUrl = assembly.GetMetadata("PackageProjectUrl");
+        DocumentationUrl = assembly.GetMetadata("DocumentationUrl");
+        RepositoryUrl = assembly.GetMetadata("RepositoryUrl");
+        MarketplaceUrl = assembly.GetMetadata("UmbracoMarketplaceUrl");
+        NuGetUrl = assembly.GetMetadata("NuGetUrl");
     }
 
 }

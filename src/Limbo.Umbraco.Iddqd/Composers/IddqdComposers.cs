@@ -1,4 +1,5 @@
 using Limbo.Umbraco.Iddqd.Api;
+using Limbo.Umbraco.Iddqd.Factories;
 using Limbo.Umbraco.Iddqd.Helpers;
 using Limbo.Umbraco.Iddqd.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public class IddqdComposer : IComposer {
         builder.Services.AddSingleton<IddqdHelper>();
         builder.Services.AddSingleton<IddqdService>();
         builder.Services.AddSingleton<IddqdServiceDependencies>();
+        builder.Services.AddSingleton<IddqdModelFactory>();
         builder.Services.AddTransient<IddqdRequestHelper>();
     }
 

@@ -8,6 +8,7 @@ using Skybrud.Essentials.Umbraco.Manifests.Extensions.EntryPoints;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Icons;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Localization;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Menus;
+using Skybrud.Essentials.Umbraco.Manifests.Extensions.Modals;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Sections;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Users;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Workspaces;
@@ -38,8 +39,8 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                 Version = IddqdPackage.InformationalVersion,
                 Extensions = [
                     new BackofficeEntryPointExtension {
-                        Name = $"{Name}: Entry Point",
                         Alias = $"{Alias}.EntryPoint",
+                        Name = $"{Name}: Entry Point",
                         Js = $"/App_Plugins/{alias}/EntryPoint.js?v={CacheBuster}"
                     },
                     ..GetSettingsTreeExtensions(),
@@ -53,7 +54,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                     CreateWorkspaceView("User", WorkspaceAliasCondition.User),
                     new EntityUserPermissionExtension {
 	                    Alias = "My.UserPermission.Document.Iddqd",
-	                    Name = "IDDQD document permission",
+	                    Name = $"{Name}: Document permission",
 	                    ForEntityTypes = ["limbo"],
 	                    Meta = new EntityUserPermissionExtensionMeta {
                             Verbs = ["My.Document.Iddqd"],
@@ -64,8 +65,8 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                     },
                     new LocalizationExtension {
                         Alias = $"{alias}.Localize.EnUS",
-                        Name = "English",
-                        Meta = new LocalizationExtensionMeta {
+                        Name = $"{Name}: English",
+                        Meta = new LocalizationMeta {
                             Culture = "en",
                             Localizations = LocalizationDictionary
                                 .Create()
@@ -106,7 +107,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Name = $"{Name}: {type} Workspace View",
             ElementName = "limbo-iddqd-content-app",
             Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/{type}.js?v={CacheBuster}",
-            Meta = new WorkspaceViewExtensionMeta {
+            Meta = new WorkspaceViewMeta {
                 Label = "Iddqd",
                 PathName = "iddqd",
                 Icon = "icon-lab"
@@ -126,7 +127,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Kind = "menu",
             Alias = $"{Alias}.SidebarApp.SettingsGroup",
             Name = $"{Name}: Sidebar App",
-            Meta = new SectionSidebarAppExtensionMeta {
+            Meta = new SectionSidebarAppMeta {
                 Label = "Iddqd",
                 Menu = menu.Alias
             },
@@ -138,9 +139,52 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         return [
             menu,
             sidebarApp,
+            ..GetDataTypeExtensions(menu),
             ..GetDomainExtensions(menu),
+            ..GetExtensionExtensions(menu),
             ..GetPackageExtensions(menu)
         ];
+
+    }
+
+    private static IEnumerable<IExtension> GetDataTypeExtensions(MenuExtension menu) {
+
+        MenuItemExtension menuItem = new() {
+            Alias = $"{Alias}.DataTypes.TreeRoot",
+            Name = $"{Name}: Data Types Tree",
+            Weight = 100,
+            Meta = new MenuItemMeta {
+                Label = "Data Types",
+                Icon = "icon-box",
+                EntityType = "iddqd-data-types",
+                Menus = [menu.Alias]
+            }
+        };
+
+        WorkspaceExtension workspace = new() {
+            Alias = $"{Alias}.DataTypes.Workspace",
+            Name = $"{Name}: Data Types Workspace",
+            Meta = new WorkspaceMeta {
+                EntityType = "iddqd-data-types"
+            }
+        };
+
+        WorkspaceViewExtension workspaceView = new() {
+            Alias = $"{Alias}.DataTypes.WorkspaceView",
+            Name = $"{Name}: Data Types Workspace View",
+            Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/DataTypes.js?v={CacheBuster}",
+            Weight = 100,
+            Meta = new WorkspaceViewMeta {
+                Label = "Overview",
+                PathName = "overview",
+                Icon = "icon-info"
+            },
+            Conditions = [
+                new WorkspaceAliasCondition(workspace.Alias)
+            ]
+        };
+
+        return [menuItem, workspace, workspaceView];
 
     }
 
@@ -150,7 +194,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Alias = $"{Alias}.Domains.TreeRoot",
             Name = $"{Name}: Domains Tree",
             Weight = 100,
-            Meta = new MenuItemExtensionMeta {
+            Meta = new MenuItemMeta {
                 Label = "Domains",
                 Icon = "icon-globe",
                 EntityType = "iddqd-domains",
@@ -162,7 +206,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Kind = "default",
             Alias = $"{Alias}.Domains.Workspace",
             Name = $"{Name}: Domains Workspace",
-            Meta = new WorkspaceExtensionMeta {
+            Meta = new WorkspaceMeta {
                 EntityType = "iddqd-domains"
             }
         };
@@ -174,7 +218,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Domains.js?v={CacheBuster}",
             ElementName = "iddqd-domains-workspace-view",
             Weight = 100,
-            Meta = new WorkspaceViewExtensionMeta {
+            Meta = new WorkspaceViewMeta {
                 Label = "Iddqd",
                 PathName = "overview",
                 Icon = "icon-info"
@@ -188,13 +232,65 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
 
     }
 
+    private static IEnumerable<IExtension> GetExtensionExtensions(MenuExtension menu) {
+
+        return [];
+
+        MenuItemExtension menuItem = new() {
+            Alias = $"{Alias}.Extensions.TreeRoot",
+            Name = $"{Name}: Extensions Tree",
+            Weight = 100,
+            Meta = new MenuItemMeta {
+                Label = "Extensions",
+                Icon = "icon-box",
+                EntityType = "iddqd-extensions",
+                Menus = [menu.Alias]
+            }
+        };
+
+        WorkspaceExtension workspace = new() {
+            Kind = "default",
+            Alias = $"{Alias}.Extensions.Workspace",
+            Name = $"{Name}: Extensions Workspace",
+            Meta = new WorkspaceMeta {
+                EntityType = "iddqd-extensions"
+            }
+        };
+
+        WorkspaceViewExtension workspaceView = new() {
+            Kind = "default",
+            Alias = $"{Alias}.Extensions.WorkspaceView",
+            Name = $"{Name}: Extensions Workspace View",
+            Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Extensions.js?v={CacheBuster}",
+            ElementName = "iddqd-extensions-workspace-view",
+            Weight = 100,
+            Meta = new WorkspaceViewMeta {
+                Label = "Overview",
+                PathName = "overview",
+                Icon = "icon-info"
+            },
+            Conditions = [
+                new WorkspaceAliasCondition(workspace.Alias)
+            ]
+        };
+
+        //ModalExtension modal = new() {
+        //    Alias = $"{Alias}.Extensions.Modal",
+        //    Name = $"{Name}: Extensions Modal",
+        //    Element = $"/App_Plugins/{Alias}/Elements/Modals/Extensions.js?v={CacheBuster}"
+        //};
+
+        return [menuItem, workspace, workspaceView];
+
+    }
+
     private static IEnumerable<IExtension> GetPackageExtensions(MenuExtension menu) {
 
         MenuItemExtension menuItem = new() {
             Alias = $"{Alias}.Packages.TreeRoot",
             Name = $"{Name}: Packages Tree",
             Weight = 100,
-            Meta = new MenuItemExtensionMeta {
+            Meta = new MenuItemMeta {
                 Label = "Packages",
                 Icon = "icon-box",
                 EntityType = "iddqd-packages",
@@ -205,7 +301,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         WorkspaceExtension workspace = new() {
             Alias = $"{Alias}.Packages.Workspace",
             Name = $"{Name}: Packages Workspace",
-            Meta = new WorkspaceExtensionMeta {
+            Meta = new WorkspaceMeta {
                 EntityType = "iddqd-packages"
             }
         };
@@ -215,7 +311,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
             Name = $"{Name}: Packages Workspace View",
             Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Packages.js?v={CacheBuster}",
             Weight = 100,
-            Meta = new WorkspaceViewExtensionMeta {
+            Meta = new WorkspaceViewMeta {
                 Label = "Overview",
                 PathName = "overview",
                 Icon = "icon-info"
