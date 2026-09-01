@@ -162,6 +162,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         };
 
         WorkspaceExtension workspace = new() {
+            Kind = "default",
             Alias = $"{Alias}.DataTypes.Workspace",
             Name = $"{Name}: Data Types Workspace",
             Meta = new WorkspaceMeta {
@@ -170,6 +171,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         };
 
         WorkspaceViewExtension workspaceView = new() {
+            Kind = "default",
             Alias = $"{Alias}.DataTypes.WorkspaceView",
             Name = $"{Name}: Data Types Workspace View",
             Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/DataTypes.js?v={CacheBuster}",
@@ -299,6 +301,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         };
 
         WorkspaceExtension workspace = new() {
+            Kind = "default",
             Alias = $"{Alias}.Packages.Workspace",
             Name = $"{Name}: Packages Workspace",
             Meta = new WorkspaceMeta {
@@ -307,6 +310,7 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
         };
 
         WorkspaceViewExtension workspaceView = new() {
+            Kind = "default",
             Alias = $"{Alias}.Packages.WorkspaceView",
             Name = $"{Name}: Packages Workspace View",
             Js = $"/App_Plugins/{Alias}/Elements/WorkspaceViews/Packages.js?v={CacheBuster}",
