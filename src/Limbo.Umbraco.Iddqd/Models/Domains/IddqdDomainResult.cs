@@ -1,4 +1,5 @@
 ﻿using System;
+using Skybrud.Essentials.Globalization;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
@@ -29,7 +30,7 @@ public class IddqdDomainResult {
         LanguageName = language?.CultureName;
         if (Name.Contains("xn--")) {
             NameAscii = Name;
-            Name = IddqdUtils.FromPunycode(Name);
+            Name = GlobalizationUtils.FromPunycode(Name);
         } else {
             NameAscii = Name;
         }
