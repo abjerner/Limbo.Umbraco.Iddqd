@@ -8,9 +8,7 @@ using Skybrud.Essentials.Umbraco.Manifests.Extensions.EntryPoints;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Icons;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Localization;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Menus;
-using Skybrud.Essentials.Umbraco.Manifests.Extensions.Modals;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Sections;
-using Skybrud.Essentials.Umbraco.Manifests.Extensions.Users;
 using Skybrud.Essentials.Umbraco.Manifests.Extensions.Workspaces;
 using Umbraco.Cms.Core.Manifest;
 using Umbraco.Cms.Infrastructure.Manifest;
@@ -52,17 +50,17 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                     CreateWorkspaceView("Member", WorkspaceAliasCondition.Member),
                     CreateWorkspaceView("MemberType", WorkspaceAliasCondition.MemberType),
                     CreateWorkspaceView("User", WorkspaceAliasCondition.User),
-                    new EntityUserPermissionExtension {
-	                    Alias = "My.UserPermission.Document.Iddqd",
-	                    Name = $"{Name}: Document permission",
-	                    ForEntityTypes = ["limbo"],
-	                    Meta = new EntityUserPermissionExtensionMeta {
-                            Verbs = ["My.Document.Iddqd"],
-		                    Label = "Workspace View / Content App",
-		                    Description = "Allows access to the IDDQD workspace view / content app.",
-		                    Group = "limboIddqd",
-	                    },
-                    },
+                    //new EntityUserPermissionExtension {
+	                   // Alias = "My.UserPermission.Document.Iddqd",
+	                   // Name = $"{Name}: Document permission",
+	                   // ForEntityTypes = ["limbo"],
+	                   // Meta = new EntityUserPermissionExtensionMeta {
+                    //        Verbs = ["My.Document.Iddqd"],
+		                  //  Label = "Workspace View / Content App",
+		                  //  Description = "Allows access to the IDDQD workspace view / content app.",
+		                  //  Group = "limboIddqd",
+	                   // },
+                    //},
                     new LocalizationExtension {
                         Alias = $"{alias}.Localize.EnUS",
                         Name = $"{Name}: English",
