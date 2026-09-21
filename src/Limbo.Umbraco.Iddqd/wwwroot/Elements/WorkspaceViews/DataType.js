@@ -58,11 +58,23 @@ export class LimboIddqdDataTypeWorkspaceViewElement extends LimboIddqdWorkspaceV
                         </tr>
                         <tr>
                             <th>Editor Alias</th>
-                            <td>${this.dataType.editorAlias}</td>
+                            <td>
+                                ${when(this.dataType.editorAlias, () => html`
+                                    <code class="select-all">${this.dataType.editorAlias}</code>
+                                `, () => html`
+                                    <code class="select-all danger">N/A</code>
+                                `)}
+                            </td>
                         </tr>
                         <tr>
                             <th>Editor UI Alias</th>
-                            <td>${this.dataType.editorUiAlias}</td>
+                            <td>
+                                ${when(this.dataType.editorUiAlias, () => html`
+                                    <code class="select-all">${this.dataType.editorUiAlias}</code>
+                                `, () => html`
+                                    <code class="select-all danger">N/A</code>
+                                `)}
+                            </td>
                         </tr>
                         <tr>
                             <th>Database Type</th>
