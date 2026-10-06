@@ -68,8 +68,8 @@ public class IddqdPackageManifestReader : IPackageManifestReader {
                             Culture = "en",
                             Localizations = LocalizationDictionary
                                 .Create()
-                                .Set("user", "permissionsEntityGroup_limbo", "Limbo Packages")
-                                .Set("actionCategories", "limboIddqd", "Iddqd")
+                                .Add("user", "permissionsEntityGroup_limbo", "Limbo Packages")
+                                .Add("actionCategories", "limboIddqd", "Iddqd")
                         }
                     },
                     new IconsExtension {
