@@ -1,4 +1,4 @@
-The MIT License (MIT)
+﻿The MIT License (MIT)
 
 Copyright (c) 2026 [Anders Bjerner](https://github.com/abjerner)
 
