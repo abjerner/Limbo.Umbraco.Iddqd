@@ -33,6 +33,7 @@
 
 	<!-- Include additional metadata in the assembly -->
 	<ItemGroup>
+		<AssemblyMetadata Include="Authors" Value="$(Authors)" />
 		<AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/" />
 		<AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/docs/v13/" />
 		<AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Limbo.Umbraco.Iddqd" />
