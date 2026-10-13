@@ -2,65 +2,65 @@
 
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net8</TargetFramework>
-    <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8</TargetFramework>
+		<StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <VersionPrefix>13.0.1</VersionPrefix>
-    <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
-    <Company>Limbo</Company>
-    <Product>Limbo Iddqd</Product>
-    <Authors>Anders Bjerner</Authors>
-    <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
-    <Title>Limbo Iddqd</Title>
-    <AssemblyTitle>Limbo Iddqd</AssemblyTitle>
-    <Description>Package with various developer oriented improvements for the Umbraco backoffice.</Description>
-  </PropertyGroup>
+	<PropertyGroup>
+		<VersionPrefix>13.0.1</VersionPrefix>
+		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+		<Company>Limbo</Company>
+		<Product>Limbo Iddqd</Product>
+		<Authors>Anders Bjerner</Authors>
+		<Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
+		<Title>Limbo Iddqd</Title>
+		<AssemblyTitle>Limbo Iddqd</AssemblyTitle>
+		<Description>Package with various developer oriented improvements for the Umbraco backoffice.</Description>
+	</PropertyGroup>
 
-  <!-- Information for the NuGet package -->
-  <PropertyGroup>
-    <PackageId>Limbo.Umbraco.Iddqd</PackageId>
-    <PackageTags>Limbo, Skybrud, Iddqd, Umbraco, Umbraco-Marketplace</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://packages.limbo.works/limbo.umbraco.iddqd/v13/</PackageProjectUrl>
-    <PackageIcon>Limbo.png</PackageIcon>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/abjerner/Limbo.Umbraco.Iddqd</RepositoryUrl>
-  </PropertyGroup>
+	<!-- Information for the NuGet package -->
+	<PropertyGroup>
+		<PackageId>Limbo.Umbraco.Iddqd</PackageId>
+		<PackageTags>Limbo, Skybrud, Iddqd, Umbraco, Umbraco-Marketplace</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://packages.limbo.works/limbo.umbraco.iddqd/v13/</PackageProjectUrl>
+		<PackageIcon>Limbo.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/abjerner/Limbo.Umbraco.Iddqd</RepositoryUrl>
+	</PropertyGroup>
 
-  <!-- Include additional metadata in the assembly -->
-  <ItemGroup>
-    <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/" />
-    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/docs/v13/" />
-    <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Limbo.Umbraco.Iddqd" />
-    <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/limbo.umbraco.iddqd" />
-  </ItemGroup>
+	<!-- Include additional metadata in the assembly -->
+	<ItemGroup>
+		<AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/" />
+		<AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.iddqd/docs/v13/" />
+		<AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Limbo.Umbraco.Iddqd" />
+		<AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/limbo.umbraco.iddqd" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-    <None Include="compilerconfig.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="compilerconfig.json" />
+		<None Include="compilerconfig.json" />
+	</ItemGroup>
 
-  <!-- Include NuGet dependencies -->
-  <ItemGroup>
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.57" />
-    <PackageReference Include="Skybrud.Essentials.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" />
-  </ItemGroup>
+	<!-- Include NuGet dependencies -->
+	<ItemGroup>
+		<PackageReference Include="Skybrud.Essentials" Version="1.1.57" />
+		<PackageReference Include="Skybrud.Essentials.AspNetCore" Version="1.0.0" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" />
+	</ItemGroup>
 
-  <!-- Include package icon for NuGet -->
-  <ItemGroup>
-    <None Include="../build/Limbo.png" Pack="true" PackagePath="\" />
-  </ItemGroup>
+	<!-- Include package icon for NuGet -->
+	<ItemGroup>
+		<None Include="../build/Limbo.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
-  <!-- Generate XML documentation -->
-  <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-  </PropertyGroup>
+	<!-- Generate XML documentation -->
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
 
 </Project>
