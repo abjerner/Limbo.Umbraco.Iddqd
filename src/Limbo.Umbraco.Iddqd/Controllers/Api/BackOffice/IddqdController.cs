@@ -13,7 +13,7 @@ using Limbo.Umbraco.Iddqd.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Essentials.AspNetCore;
 using Skybrud.Essentials.Collections;
-using Skybrud.Essentials.Collections.Extensions;
+using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Strings.Extensions;
